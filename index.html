@@ -112,9 +112,37 @@
 /* The replacement mark is stacked, so give it the same intentional header/footer presence as the original wordmark. */
 .framer-86q991 { width:105px !important; height:84px !important; aspect-ratio:auto !important; }
 .framer-nt1nO .framer-150iiby { width:104px !important; height:84px !important; aspect-ratio:auto !important; }
-</style><style id="nook-studios-legacy-guard">img[src*="qwOpUM26DSItTacXuhZ8xNqd4g"]{visibility:hidden!important}</style>
+/* Hide the Framer attribution as soon as hydrated footer variants are mounted. */
+[data-framer-name="Powered by Framer"], [data-framer-name="Made in Framer"] { display:none !important; }
+</style><style id="nook-studios-legacy-guard">img[src*="qwOpUM26DSItTacXuhZ8xNqd4g"],img[srcset*="qwOpUM26DSItTacXuhZ8xNqd4g"]{visibility:hidden!important}</style>
 <script>
-(()=>{const legacy="qwOpUM26DSItTacXuhZ8xNqd4g",replacement="./nook-studios-logo.png?v=b09e9a9a";const fix=()=>document.querySelectorAll("img").forEach(img=>{const src=img.getAttribute("src")||"";if(src.includes(legacy)){img.setAttribute("src",replacement);img.setAttribute("alt","Nook Studios");img.style.objectFit="contain"}});new MutationObserver(fix).observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:["src"]});fix()})();
+(()=>{
+  const legacy="qwOpUM26DSItTacXuhZ8xNqd4g", replacement="./nook-studios-logo.png?v=b09e9a9a";
+  const isLegacy=value=>String(value||"").includes(legacy);
+  const setReplacement=img=>{
+    if(!img) return;
+    if(img.getAttribute("src")!==replacement) img.setAttribute("src",replacement);
+    img.setAttribute("alt","Nook Studios");
+    img.style.objectFit="contain";
+  };
+  const originalSetAttribute=Element.prototype.setAttribute;
+  Element.prototype.setAttribute=function(name,value){
+    if(this.tagName==="IMG" && (name==="src" || name==="srcset") && isLegacy(value)) value=replacement;
+    return originalSetAttribute.call(this,name,value);
+  };
+  const srcDescriptor=Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,"src");
+  if(srcDescriptor && srcDescriptor.set) Object.defineProperty(HTMLImageElement.prototype,"src",{...srcDescriptor,set(value){return srcDescriptor.set.call(this,isLegacy(value)?replacement:value)}});
+  const srcsetDescriptor=Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,"srcset");
+  if(srcsetDescriptor && srcsetDescriptor.set) Object.defineProperty(HTMLImageElement.prototype,"srcset",{...srcsetDescriptor,set(value){return srcsetDescriptor.set.call(this,isLegacy(value)?replacement:value)}});
+  const scrub=()=>{
+    if(!document.body) return;
+    document.querySelectorAll("img").forEach(img=>{if(isLegacy(img.getAttribute("src")) || isLegacy(img.getAttribute("srcset"))) setReplacement(img)});
+    document.querySelectorAll('[data-framer-name="Powered by Framer"],[data-framer-name="Made in Framer"]').forEach(el=>{el.style.display="none"});
+  };
+  const observer=new MutationObserver(scrub);
+  const start=()=>{if(document.documentElement) observer.observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:["src","srcset"]});scrub()};
+  if(document.documentElement) start(); else new MutationObserver((_,o)=>{if(document.documentElement){o.disconnect();start()}}).observe(document,{childList:true});
+})();
 </script></head>
 <body>
 	<script async="" src="https://events.framer.com/script?v=2" data-fid="bcbcebb1c8401d86e10f9c7d816b3c086fcc1b7c3c2e1c2dc1c39d9daf923c53" data-no-nt=""></script>
