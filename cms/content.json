@@ -1,0 +1,312 @@
+{
+  "site": {
+    "name": "Agenmint",
+    "logo": "./nook-studios-logo.png",
+    "favicon": "",
+    "primaryColor": "#0B1B2E",
+    "secondaryColor": "#FFFFFF",
+    "accentColor": "#5B48EB",
+    "backgroundColor": "#FFFFFF",
+    "textColor": "#0B1B2E",
+    "headingFont": "Geist",
+    "bodyFont": "Geist",
+    "headingFontSize": "64px",
+    "bodyFontSize": "16px",
+    "headingWeight": "700",
+    "bodyWeight": "400",
+    "socialLinks": {
+      "instagram": "",
+      "dribbble": "",
+      "behance": "",
+      "linkedin": ""
+    },
+    "contactEmail": "",
+    "contactPhone": "",
+    "address": ""
+  },
+  "pages": {
+    "home": {
+      "title": "Home",
+      "hero": {
+        "eyebrow": "#1 Popular digital marketing agency",
+        "heading": "We build brands that win.",
+        "paragraph": "With a combined years of experience, our team is passionate about helping businesses grow.",
+        "primaryButtonText": "Book a Call",
+        "primaryButtonLink": "#contact",
+        "secondaryButtonText": "See Our Works",
+        "secondaryButtonLink": "#works",
+        "textColor": "#FFFFFF",
+        "backgroundColor": "#0B1B2E",
+        "fontSize": "64px",
+        "fontWeight": "700",
+        "alignment": "left",
+        "image": ""
+      },
+      "about": {
+        "heading": "10+ Strategic Growth Partners in Marketing",
+        "paragraph": "We believe that the best user experiences are intuitive, beautiful and a joy to use. These principles are reflected in our work through an instinctual approach to design, and a meticulous attention to detail.",
+        "buttonText": "More About Us",
+        "buttonLink": "#about"
+      },
+      "contact": {
+        "heading": "Want to Discuss A Project",
+        "buttonText": "Let’s Talk",
+        "buttonLink": "#contact"
+      }
+    },
+    "works": {
+      "title": "Works",
+      "heading": "Featured works",
+      "buttonText": "View More Works",
+      "buttonLink": "/works"
+    },
+    "services": {
+      "title": "Services",
+      "heading": "Trusted service that delivers every time."
+    },
+    "careers": {
+      "title": "Careers",
+      "heading": "Build what matters."
+    },
+    "insights": {
+      "title": "Blog / Insights",
+      "heading": "Latest Articles",
+      "paragraph": "At Agenmint, we're more than just a design agency—we're your creative companions on the journey to design excellence."
+    },
+    "contact": {
+      "title": "Contact",
+      "heading": "Let’s talk about your next project."
+    }
+  },
+  "works": [
+    {
+      "id": "work-bajindu",
+      "title": "Bajindu",
+      "category": "Brand Identity",
+      "coverImage": "./framerusercontent.com/images/tidtw9jROlXgTScfw5wbpXENcn8_width=3000&height=3000.png",
+      "additionalImages": [],
+      "shortDescription": "A bold brand identity built to stand out.",
+      "fullDescription": "",
+      "challenge": "",
+      "solution": "",
+      "result": "",
+      "order": 1,
+      "published": true
+    },
+    {
+      "id": "work-pump",
+      "title": "Pump",
+      "category": "Brand Identity",
+      "coverImage": "./framerusercontent.com/images/tkRfDIzYRyRvCT4ZUjJj8Vw0hic_width=1272&height=1194.png",
+      "additionalImages": [],
+      "shortDescription": "A memorable identity with energy and clarity.",
+      "fullDescription": "",
+      "challenge": "",
+      "solution": "",
+      "result": "",
+      "order": 2,
+      "published": true
+    },
+    {
+      "id": "work-canne",
+      "title": "Canne",
+      "category": "Brand Identity",
+      "coverImage": "./framerusercontent.com/images/wZf2Jf837Mu6LTEK1IbBdfjqBg_width=1320&height=1650.png",
+      "additionalImages": [],
+      "shortDescription": "A considered visual system for a modern brand.",
+      "fullDescription": "",
+      "challenge": "",
+      "solution": "",
+      "result": "",
+      "order": 3,
+      "published": true
+    },
+    {
+      "id": "work-absolute-308",
+      "title": "Absolute.308",
+      "category": "Brand Identity",
+      "coverImage": "./framerusercontent.com/images/y3WMRv29CohMfFM44AXdkRhvKI_width=2280&height=1698.png",
+      "additionalImages": [],
+      "shortDescription": "Strategy and design that give a product its edge.",
+      "fullDescription": "",
+      "challenge": "",
+      "solution": "",
+      "result": "",
+      "order": 4,
+      "published": true
+    },
+    {
+      "id": "work-cuppa-cuppa",
+      "title": "Cuppa Cuppa",
+      "category": "Brand Identity",
+      "coverImage": "./framerusercontent.com/images/z9y8N989HPjzV0fa23eON6Jqg_width=1320&height=1650.png",
+      "additionalImages": [],
+      "shortDescription": "A warm, distinctive identity made for connection.",
+      "fullDescription": "",
+      "challenge": "",
+      "solution": "",
+      "result": "",
+      "order": 5,
+      "published": true
+    }
+  ],
+  "testimonials": [
+    {
+      "id": "testimonial-emily-ross",
+      "clientPhoto": "./framerusercontent.com/images/Qhci2BrqufhycMHG3nlAqebgns_width=1440&height=1000.png",
+      "name": "Emily Ross",
+      "role": "Business Consultant",
+      "quote": "Super experience",
+      "rating": 5,
+      "order": 1,
+      "published": true
+    },
+    {
+      "id": "testimonial-kenneth",
+      "clientPhoto": "./framerusercontent.com/images/tkRfDIzYRyRvCT4ZUjJj8Vw0hic_width=1272&height=1194.png",
+      "name": "Kenneth",
+      "role": "CTO",
+      "quote": "Super experience",
+      "rating": 5,
+      "order": 2,
+      "published": true
+    },
+    {
+      "id": "testimonial-k-cronin",
+      "clientPhoto": "./framerusercontent.com/images/bYqQTLi2PXtT3vCz2TNLyow_width=1272&height=1194.png",
+      "name": "K. Cronin",
+      "role": "Founder",
+      "quote": "Super experience",
+      "rating": 5,
+      "order": 3,
+      "published": true
+    },
+    {
+      "id": "testimonial-jeffrey",
+      "clientPhoto": "./framerusercontent.com/images/9tzjowsDt8P5XO5tTsdaEQBhN70_width=1272&height=1194.png",
+      "name": "Jeffrey",
+      "role": "Business Consultant",
+      "quote": "Super experience",
+      "rating": 5,
+      "order": 4,
+      "published": true
+    }
+  ],
+  "services": [
+    {
+      "id": "service-branding-design",
+      "title": "Branding & Design",
+      "description": "Build a brand people remember and trust.",
+      "icon": "",
+      "order": 1,
+      "published": true
+    },
+    {
+      "id": "service-seo-analytics",
+      "title": "SEO & Analytics",
+      "description": "Turn insight into measurable, sustainable growth.",
+      "icon": "",
+      "order": 2,
+      "published": true
+    },
+    {
+      "id": "service-content-writing",
+      "title": "Content Writing",
+      "description": "The discovery phase involves understanding the brand voice, target audience, and content goals.",
+      "icon": "",
+      "order": 3,
+      "published": true
+    },
+    {
+      "id": "service-ui-ux-design",
+      "title": "UI/UX Design",
+      "description": "Create intuitive, beautiful experiences that are a joy to use.",
+      "icon": "",
+      "order": 4,
+      "published": true
+    }
+  ],
+  "process": [
+    {
+      "id": "process-discover",
+      "title": "Discover",
+      "description": "Understand the brand, audience, and opportunity.",
+      "order": 1,
+      "published": true
+    },
+    {
+      "id": "process-strategize",
+      "title": "Strategize",
+      "description": "Uncover new opportunities, explore insights, and unlock growth with endless possibilities.",
+      "order": 2,
+      "published": true
+    },
+    {
+      "id": "process-create",
+      "title": "Create",
+      "description": "Create memorable brands and engaging visuals that connect with your audience.",
+      "order": 3,
+      "published": true
+    },
+    {
+      "id": "process-launch",
+      "title": "Launch",
+      "description": "Bring the work to life and keep improving what works.",
+      "order": 4,
+      "published": true
+    }
+  ],
+  "pricing": {},
+  "faq": [
+    {
+      "id": "faq-strengths",
+      "question": "What are your main strengths in UI/UX design as an agency?",
+      "answer": "Our main strengths lie in creating modern, user-focused designs that balance aesthetics with usability.",
+      "published": true
+    },
+    {
+      "id": "faq-results",
+      "question": "How long does it take to see results from digital campaigns?",
+      "answer": "",
+      "published": true
+    },
+    {
+      "id": "faq-branding",
+      "question": "Can you help with branding and logo design?",
+      "answer": "",
+      "published": true
+    },
+    {
+      "id": "faq-support",
+      "question": "Do you offer ongoing support after the project is completed?",
+      "answer": "",
+      "published": true
+    },
+    {
+      "id": "faq-start",
+      "question": "How can I get started with Agenmint?",
+      "answer": "",
+      "published": true
+    }
+  ],
+  "articles": [
+    {
+      "id": "article-cloning",
+      "category": "Technology",
+      "date": "Mar 5, 2025",
+      "readTime": "19 mins read",
+      "title": "Stepping Into Cloning Industry",
+      "description": "It’s never been a quite more experience more than arting to grow era world",
+      "published": true
+    },
+    {
+      "id": "article-motion",
+      "category": "Design",
+      "date": "Dec 4, 2025",
+      "readTime": "5 mins read",
+      "title": "AI in Motion Design Prototype",
+      "description": "Growing in the era of futuristic world of motion graphics is here",
+      "published": true
+    }
+  ]
+}
