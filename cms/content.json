@@ -1,6 +1,6 @@
 {
   "site": {
-    "name": "Agenmint",
+    "name": "Buildrco co",
     "logo": "./nook-studios-logo.png",
     "favicon": "",
     "primaryColor": "#0B1B2E",
@@ -52,30 +52,802 @@
         "heading": "Want to Discuss A Project",
         "buttonText": "Let’s Talk",
         "buttonLink": "#contact"
-      }
+      },
+      "slug": "home",
+      "published": true,
+      "sections": [
+        {
+          "id": "hero",
+          "title": "Hero",
+          "eyebrow": "",
+          "visible": true,
+          "blocks": [
+            {
+              "id": "block-mu0io7kqgog92",
+              "key": "eyebrow",
+              "type": "text",
+              "label": "eyebrow",
+              "value": "#1 Popular digital marketing agency",
+              "sourceText": "#1 Popular digital marketing agency",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            },
+            {
+              "id": "block-mu0io7kr6zxb5",
+              "key": "heading",
+              "type": "text",
+              "label": "heading",
+              "value": "We build brands that win.",
+              "sourceText": "We build brands that win.",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            },
+            {
+              "id": "block-mu0io7krop88f",
+              "key": "paragraph",
+              "type": "paragraph",
+              "label": "paragraph",
+              "value": "With a combined years of experience, our team is passionate about helping businesses grow.",
+              "sourceText": "With a combined years of experience, our team is passionate about helping businesses grow.",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            },
+            {
+              "id": "block-mu0io7krwg297",
+              "key": "primaryButtonText",
+              "type": "button",
+              "label": "primaryButtonText",
+              "value": "Book a Call",
+              "sourceText": "Book a Call",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            },
+            {
+              "id": "block-mu0io7kr8k78t",
+              "key": "primaryButtonLink",
+              "type": "button",
+              "label": "primaryButtonLink",
+              "value": "#contact",
+              "sourceText": "#contact",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            },
+            {
+              "id": "block-mu0io7kr6703n",
+              "key": "secondaryButtonText",
+              "type": "button",
+              "label": "secondaryButtonText",
+              "value": "See Our Works",
+              "sourceText": "See Our Works",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            },
+            {
+              "id": "block-mu0io7kracxrs",
+              "key": "secondaryButtonLink",
+              "type": "button",
+              "label": "secondaryButtonLink",
+              "value": "#works",
+              "sourceText": "#works",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            },
+            {
+              "id": "block-mu0io7krjyddr",
+              "key": "textColor",
+              "type": "text",
+              "label": "textColor",
+              "value": "#FFFFFF",
+              "sourceText": "#FFFFFF",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            },
+            {
+              "id": "block-mu0io7krlog8k",
+              "key": "backgroundColor",
+              "type": "text",
+              "label": "backgroundColor",
+              "value": "#0B1B2E",
+              "sourceText": "#0B1B2E",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            },
+            {
+              "id": "block-mu0io7krhnppv",
+              "key": "fontSize",
+              "type": "text",
+              "label": "fontSize",
+              "value": "64px",
+              "sourceText": "64px",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            },
+            {
+              "id": "block-mu0io7kr45mxj",
+              "key": "fontWeight",
+              "type": "text",
+              "label": "fontWeight",
+              "value": "700",
+              "sourceText": "700",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            },
+            {
+              "id": "block-mu0io7krejadc",
+              "key": "alignment",
+              "type": "text",
+              "label": "alignment",
+              "value": "left",
+              "sourceText": "left",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            },
+            {
+              "id": "block-mu0io7kradz1u",
+              "key": "image",
+              "type": "text",
+              "label": "image",
+              "value": "",
+              "sourceText": "",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            }
+          ],
+          "style": {
+            "textColor": "",
+            "backgroundColor": "",
+            "fontFamily": "",
+            "fontSize": "",
+            "fontWeight": "",
+            "lineHeight": "",
+            "letterSpacing": "",
+            "alignment": ""
+          }
+        },
+        {
+          "id": "about",
+          "title": "about",
+          "eyebrow": "",
+          "visible": true,
+          "blocks": [
+            {
+              "id": "block-mu0io7ks4gzgi",
+              "key": "heading",
+              "type": "text",
+              "label": "heading",
+              "value": "10+ Strategic Growth Partners in Marketing",
+              "sourceText": "10+ Strategic Growth Partners in Marketing",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            },
+            {
+              "id": "block-mu0io7ks15e6x",
+              "key": "paragraph",
+              "type": "paragraph",
+              "label": "paragraph",
+              "value": "We believe that the best user experiences are intuitive, beautiful and a joy to use. These principles are reflected in our work through an instinctual approach to design, and a meticulous attention to detail.",
+              "sourceText": "We believe that the best user experiences are intuitive, beautiful and a joy to use. These principles are reflected in our work through an instinctual approach to design, and a meticulous attention to detail.",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            },
+            {
+              "id": "block-mu0io7ksyl5au",
+              "key": "buttonText",
+              "type": "button",
+              "label": "buttonText",
+              "value": "More About Us",
+              "sourceText": "More About Us",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            },
+            {
+              "id": "block-mu0io7ks008me",
+              "key": "buttonLink",
+              "type": "button",
+              "label": "buttonLink",
+              "value": "#about",
+              "sourceText": "#about",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            }
+          ],
+          "style": {
+            "textColor": "",
+            "backgroundColor": "",
+            "fontFamily": "",
+            "fontSize": "",
+            "fontWeight": "",
+            "lineHeight": "",
+            "letterSpacing": "",
+            "alignment": ""
+          }
+        },
+        {
+          "id": "contact",
+          "title": "contact",
+          "eyebrow": "",
+          "visible": true,
+          "blocks": [
+            {
+              "id": "block-mu0io7ks4lu1e",
+              "key": "heading",
+              "type": "text",
+              "label": "heading",
+              "value": "Want to Discuss A Project",
+              "sourceText": "Want to Discuss A Project",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            },
+            {
+              "id": "block-mu0io7ksdy3x1",
+              "key": "buttonText",
+              "type": "button",
+              "label": "buttonText",
+              "value": "Let’s Talk",
+              "sourceText": "Let’s Talk",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            },
+            {
+              "id": "block-mu0io7ks8xet4",
+              "key": "buttonLink",
+              "type": "button",
+              "label": "buttonLink",
+              "value": "#contact",
+              "sourceText": "#contact",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            }
+          ],
+          "style": {
+            "textColor": "",
+            "backgroundColor": "",
+            "fontFamily": "",
+            "fontSize": "",
+            "fontWeight": "",
+            "lineHeight": "",
+            "letterSpacing": "",
+            "alignment": ""
+          }
+        }
+      ],
+      "heading": "We build brands that win.",
+      "paragraph": "With a combined years of experience, our team is passionate about helping businesses grow."
     },
     "works": {
       "title": "Works",
-      "heading": "Featured works",
-      "buttonText": "View More Works",
-      "buttonLink": "/works"
+      "heading": {
+        "heading": "Featured works"
+      },
+      "buttonText": {
+        "buttonText": "View More Works"
+      },
+      "buttonLink": {
+        "buttonLink": "/works"
+      },
+      "slug": "works",
+      "published": true,
+      "sections": [
+        {
+          "id": "heading",
+          "title": "heading",
+          "eyebrow": "",
+          "visible": true,
+          "blocks": [
+            {
+              "id": "block-mu0io7ksd1jta",
+              "key": "heading",
+              "type": "text",
+              "label": "heading",
+              "value": "Featured works",
+              "sourceText": "Featured works",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            }
+          ],
+          "style": {
+            "textColor": "",
+            "backgroundColor": "",
+            "fontFamily": "",
+            "fontSize": "",
+            "fontWeight": "",
+            "lineHeight": "",
+            "letterSpacing": "",
+            "alignment": ""
+          }
+        },
+        {
+          "id": "buttonText",
+          "title": "buttonText",
+          "eyebrow": "",
+          "visible": true,
+          "blocks": [
+            {
+              "id": "block-mu0io7ksjtdry",
+              "key": "buttonText",
+              "type": "text",
+              "label": "buttonText",
+              "value": "View More Works",
+              "sourceText": "View More Works",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            }
+          ],
+          "style": {
+            "textColor": "",
+            "backgroundColor": "",
+            "fontFamily": "",
+            "fontSize": "",
+            "fontWeight": "",
+            "lineHeight": "",
+            "letterSpacing": "",
+            "alignment": ""
+          }
+        },
+        {
+          "id": "buttonLink",
+          "title": "buttonLink",
+          "eyebrow": "",
+          "visible": true,
+          "blocks": [
+            {
+              "id": "block-mu0io7ksv45ku",
+              "key": "buttonLink",
+              "type": "text",
+              "label": "buttonLink",
+              "value": "/works",
+              "sourceText": "/works",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            }
+          ],
+          "style": {
+            "textColor": "",
+            "backgroundColor": "",
+            "fontFamily": "",
+            "fontSize": "",
+            "fontWeight": "",
+            "lineHeight": "",
+            "letterSpacing": "",
+            "alignment": ""
+          }
+        }
+      ]
     },
     "services": {
       "title": "Services",
-      "heading": "Trusted service that delivers every time."
+      "heading": {
+        "heading": "Trusted service that delivers every time."
+      },
+      "slug": "services",
+      "published": true,
+      "sections": [
+        {
+          "id": "heading",
+          "title": "heading",
+          "eyebrow": "",
+          "visible": true,
+          "blocks": [
+            {
+              "id": "block-mu0io7ks68d31",
+              "key": "heading",
+              "type": "text",
+              "label": "heading",
+              "value": "Trusted service that delivers every time.",
+              "sourceText": "Trusted service that delivers every time.",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            }
+          ],
+          "style": {
+            "textColor": "",
+            "backgroundColor": "",
+            "fontFamily": "",
+            "fontSize": "",
+            "fontWeight": "",
+            "lineHeight": "",
+            "letterSpacing": "",
+            "alignment": ""
+          }
+        }
+      ]
     },
     "careers": {
       "title": "Careers",
-      "heading": "Build what matters."
+      "heading": {
+        "heading": "Build what matters."
+      },
+      "slug": "careers",
+      "published": true,
+      "sections": [
+        {
+          "id": "heading",
+          "title": "heading",
+          "eyebrow": "",
+          "visible": true,
+          "blocks": [
+            {
+              "id": "block-mu0io7ksrnxaw",
+              "key": "heading",
+              "type": "text",
+              "label": "heading",
+              "value": "Build what matters.",
+              "sourceText": "Build what matters.",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            }
+          ],
+          "style": {
+            "textColor": "",
+            "backgroundColor": "",
+            "fontFamily": "",
+            "fontSize": "",
+            "fontWeight": "",
+            "lineHeight": "",
+            "letterSpacing": "",
+            "alignment": ""
+          }
+        }
+      ]
     },
     "insights": {
       "title": "Blog / Insights",
-      "heading": "Latest Articles",
-      "paragraph": "At Agenmint, we're more than just a design agency—we're your creative companions on the journey to design excellence."
+      "heading": {
+        "heading": "Latest Articles"
+      },
+      "paragraph": {
+        "paragraph": "At Agenmint, we're more than just a design agency—we're your creative companions on the journey to design excellence."
+      },
+      "slug": "insights",
+      "published": true,
+      "sections": [
+        {
+          "id": "heading",
+          "title": "heading",
+          "eyebrow": "",
+          "visible": true,
+          "blocks": [
+            {
+              "id": "block-mu0io7ks5gprl",
+              "key": "heading",
+              "type": "text",
+              "label": "heading",
+              "value": "Latest Articles",
+              "sourceText": "Latest Articles",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            }
+          ],
+          "style": {
+            "textColor": "",
+            "backgroundColor": "",
+            "fontFamily": "",
+            "fontSize": "",
+            "fontWeight": "",
+            "lineHeight": "",
+            "letterSpacing": "",
+            "alignment": ""
+          }
+        },
+        {
+          "id": "paragraph",
+          "title": "paragraph",
+          "eyebrow": "",
+          "visible": true,
+          "blocks": [
+            {
+              "id": "block-mu0io7ks6wh5o",
+              "key": "paragraph",
+              "type": "paragraph",
+              "label": "paragraph",
+              "value": "At Agenmint, we're more than just a design agency—we're your creative companions on the journey to design excellence.",
+              "sourceText": "At Agenmint, we're more than just a design agency—we're your creative companions on the journey to design excellence.",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            }
+          ],
+          "style": {
+            "textColor": "",
+            "backgroundColor": "",
+            "fontFamily": "",
+            "fontSize": "",
+            "fontWeight": "",
+            "lineHeight": "",
+            "letterSpacing": "",
+            "alignment": ""
+          }
+        }
+      ]
     },
     "contact": {
       "title": "Contact",
-      "heading": "Let’s talk about your next project."
+      "heading": {
+        "heading": "Let’s talk about your next project."
+      },
+      "slug": "contact",
+      "published": true,
+      "sections": [
+        {
+          "id": "heading",
+          "title": "heading",
+          "eyebrow": "",
+          "visible": true,
+          "blocks": [
+            {
+              "id": "block-mu0io7ks9vfnd",
+              "key": "heading",
+              "type": "text",
+              "label": "heading",
+              "value": "Let’s talk about your next project.",
+              "sourceText": "Let’s talk about your next project.",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            }
+          ],
+          "style": {
+            "textColor": "",
+            "backgroundColor": "",
+            "fontFamily": "",
+            "fontSize": "",
+            "fontWeight": "",
+            "lineHeight": "",
+            "letterSpacing": "",
+            "alignment": ""
+          }
+        }
+      ]
     }
   },
   "works": [
