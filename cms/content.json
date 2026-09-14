@@ -848,6 +848,54 @@
           }
         }
       ]
+    },
+    "page-new-mu0j6oau05nr2": {
+      "title": "New page",
+      "slug": "page-new-mu0j6oau05nr2",
+      "published": true,
+      "sections": [
+        {
+          "id": "section-new-mu0j6oau0uvx8",
+          "title": "New section",
+          "eyebrow": "",
+          "visible": true,
+          "blocks": [
+            {
+              "id": "block-mu0j6oauz8tir",
+              "key": "heading",
+              "type": "heading",
+              "label": "heading",
+              "value": "",
+              "sourceText": "",
+              "visible": true,
+              "style": {
+                "textColor": "",
+                "backgroundColor": "",
+                "fontFamily": "",
+                "fontSize": "",
+                "fontWeight": "",
+                "lineHeight": "",
+                "letterSpacing": "",
+                "alignment": ""
+              }
+            }
+          ],
+          "style": {
+            "textColor": "",
+            "backgroundColor": "",
+            "fontFamily": "",
+            "fontSize": "",
+            "fontWeight": "",
+            "lineHeight": "",
+            "letterSpacing": "",
+            "alignment": ""
+          }
+        }
+      ],
+      "section-new-mu0j6oau0uvx8": {
+        "heading": ""
+      },
+      "heading": ""
     }
   },
   "works": [
