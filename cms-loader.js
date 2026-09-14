@@ -11,22 +11,24 @@
     if (url.indexOf("./") === 0) return "/" + url.slice(2);
     return url;
   }
-  function nodesByName(name) {
+  function nodesByName(name, scope) {
     if (!name) return [];
-    try { return Array.prototype.slice.call(document.querySelectorAll('[data-framer-name="' + escSelector(name) + '"]')); } catch (_) { return []; }
+    try { return Array.prototype.slice.call((scope || document).querySelectorAll('[data-framer-name="' + escSelector(name) + '"]')); } catch (_) { return []; }
   }
-  function leafNodes() {
-    return Array.prototype.slice.call(document.querySelectorAll("body *")).filter(function (node) { return node.children.length === 0 && text(node.textContent).trim(); });
+  function leafNodes(scope) {
+    var target = scope || document;
+    var nodes = scope ? target.querySelectorAll("*") : document.querySelectorAll("body *");
+    return Array.prototype.slice.call(nodes).filter(function (node) { return node.children.length === 0 && text(node.textContent).trim(); });
   }
   function setText(node, value) {
     if (!node || value == null) return;
     var target = node.querySelector("h1,h2,h3,h4,h5,h6,p,span,a,button") || node;
     target.textContent = text(value);
   }
-  function findText(value) {
+  function findText(value, scope) {
     var expected = text(value).trim();
     if (!expected) return [];
-    return leafNodes().filter(function (node) { return text(node.textContent).trim() === expected; });
+    return leafNodes(scope).filter(function (node) { return text(node.textContent).trim() === expected; });
   }
   function updateExact(oldValue, newValue, all) {
     var previous = text(oldValue).trim();
@@ -35,6 +37,9 @@
   }
   function updateNamed(name, value, all) {
     nodesByName(name).slice(0, all ? undefined : 1).forEach(function (node) { setText(node, value); });
+  }
+  function updateNamedWithin(scopeName, name, value, all) {
+    nodesByName(scopeName).forEach(function (scope) { nodesByName(name, scope).slice(0, all ? undefined : 1).forEach(function (node) { setText(node, value); }); });
   }
   function closestWithImage(node) {
     var current = node;
@@ -52,17 +57,55 @@
     image.setAttribute("data-cms-src", url);
     if (alt != null) image.alt = text(alt);
   }
-  function imageForText(value, sourceImage, alt) {
-    var candidates = findText(value);
+  function imageKey(value) {
+    var url = imageUrl(value);
+    try { return decodeURIComponent(url); } catch (_) { return url; }
+  }
+  function findImage(sourceImage, scope) {
+    var wanted = imageKey(sourceImage);
+    if (!wanted) return null;
+    var images = Array.prototype.slice.call((scope || document).querySelectorAll("img"));
+    var existing = images.find(function (img) { return imageKey(img.getAttribute("src") || "") === wanted || imageKey(img.currentSrc || "") === wanted; });
+    return existing ? { container: existing.parentElement, image: existing } : null;
+  }
+  function imageForText(value, sourceImage, alt, referenceImage, scope) {
+    var candidates = findText(value, scope);
     var match = null;
     candidates.some(function (node) { match = closestWithImage(node); return Boolean(match); });
-    if (!match && sourceImage) {
-      var wanted = imageUrl(sourceImage);
-      var existing = Array.prototype.slice.call(document.querySelectorAll("img")).find(function (img) { return imageUrl(img.getAttribute("src") || "") === wanted || imageUrl(img.currentSrc || "") === wanted; });
-      if (existing) match = { container: existing.parentElement, image: existing };
-    }
+    if (!match && referenceImage) match = findImage(referenceImage, scope);
+    if (!match && sourceImage) match = findImage(sourceImage, scope);
     if (match) setImage(match.image, sourceImage, alt);
     return match;
+  }
+  function styleForSection(sectionName, style) {
+    if (!sectionName || !style) return;
+    var names = [sectionName, sectionName + " Section"];
+    if (/hero/i.test(sectionName)) names.push("Hero Section");
+    var targets = [];
+    names.forEach(function (name) { nodesByName(name).forEach(function (node) { if (targets.indexOf(node) === -1) targets.push(node); }); });
+    targets.forEach(function (target) {
+      if (style.textColor) target.style.color = style.textColor;
+      if (style.backgroundColor) target.style.backgroundColor = style.backgroundColor;
+      if (style.fontFamily) target.style.fontFamily = style.fontFamily;
+      if (style.fontSize) target.style.fontSize = style.fontSize;
+      if (style.fontWeight) target.style.fontWeight = style.fontWeight;
+      if (style.lineHeight) target.style.lineHeight = style.lineHeight;
+      if (style.letterSpacing) target.style.letterSpacing = style.letterSpacing;
+      if (style.alignment) target.style.textAlign = style.alignment;
+    });
+  }
+  function imageForSection(sectionName, sourceImage, alt) {
+    if (!sectionName || !sourceImage) return null;
+    var names = [sectionName, sectionName + " Section"];
+    if (/hero/i.test(sectionName)) names.push("Hero Section");
+    for (var n = 0; n < names.length; n += 1) {
+      var containers = nodesByName(names[n]);
+      for (var i = 0; i < containers.length; i += 1) {
+        var images = containers[i].querySelectorAll("img");
+        if (images.length) { var image = images[images.length - 1]; setImage(image, sourceImage, alt); return { container: image.parentElement, image: image }; }
+      }
+    }
+    return null;
   }
   function hideForText(value, hidden) {
     findText(value).forEach(function (node) {
@@ -129,7 +172,7 @@
       }
     });
   }
-  function applyBlock(block) {
+  function applyBlock(block, sectionTitle) {
     if (!block || block.visible === false) {
       if (block && block.sourceText) hideForText(block.sourceText, true);
       return;
@@ -139,7 +182,12 @@
     var oldValue = block.sourceText || block.previousValue || value;
     if (block.name) updateNamed(block.name, value, true);
     updateExact(oldValue, value, true);
-    if (block.image || block.type === "image") imageForText(block.sourceText || block.label || block.value, block.image || block.value, block.alt);
+    if (block.image || block.type === "image") {
+      var nextImage = block.image || block.value;
+      var referenceImage = block.sourceImage || (/^(https?:|\/|\.\/)/.test(text(block.sourceText)) ? block.sourceText : "");
+      var imageMatch = imageForText(block.sourceText || block.label || "", nextImage, block.alt, referenceImage);
+      if (!imageMatch && !referenceImage) imageForSection(sectionTitle, nextImage, block.alt);
+    }
     styleForText(value, block.style);
     if (block.link) {
       findText(value).forEach(function (node) { if (node.tagName === "A" || node.querySelector("a")) (node.tagName === "A" ? node : node.querySelector("a")).href = block.link; });
@@ -153,16 +201,18 @@
         (section.blocks || []).forEach(function (block) { if (block.sourceText) hideForText(block.sourceText, true); });
         return;
       }
-      (section.blocks || []).forEach(applyBlock);
-      if (section.image) imageForText(section.sourceText || section.title, section.image, section.alt);
+      styleForSection(section.title, section.style);
+      (section.blocks || []).forEach(function (block) { applyBlock(block, section.title); });
+      if (section.image) imageForText(section.sourceText || section.title, section.image, section.alt, section.sourceImage) || imageForSection(section.title, section.image, section.alt);
     });
     if (page.hero) {
       updateExact("#1 Popular digital marketing agency", page.hero.eyebrow, true);
+      updateNamedWithin("Hero Section", "Title", page.hero.heading, true);
       updateExact("We build brands that win.", page.hero.heading, true);
       updateExact("With a combined years of experience, our team is passionate about helping businesses grow.", page.hero.paragraph, true);
       updateExact("Book a Call", page.hero.primaryButtonText, true);
       updateExact("See Our Works", page.hero.secondaryButtonText, true);
-      if (page.hero.image) imageForText("We build brands that win.", page.hero.image, page.hero.imageAlt);
+      if (page.hero.image) imageForText("We build brands that win.", page.hero.image, page.hero.imageAlt, page.hero.sourceImage) || imageForSection("Hero Section", page.hero.image, page.hero.imageAlt);
     }
     if (page.about) {
       updateExact("10+ Strategic Growth Partners in Marketing", page.about.heading, true);
@@ -209,6 +259,6 @@
       return response.json();
     }).then(applyContent).catch(function (error) { root.setAttribute("data-cms-error", error.message); });
   }
-  function boot() { load(); window.setTimeout(load, 350); window.setTimeout(load, 1400); }
+  function boot() { load(); window.setTimeout(load, 350); window.setTimeout(load, 1400); window.setTimeout(load, 3000); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 })();
