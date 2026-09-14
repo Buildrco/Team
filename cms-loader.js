@@ -105,6 +105,30 @@
       }).forEach(function (img) { setImage(img, site.logo, site.name || img.alt); });
     }
   }
+  function applyMotion(oldValue, newValue, block) {
+    var animation = text(block && block.animation).toLowerCase();
+    var targets = findText(newValue).concat(findText(oldValue)).filter(function (node, index, list) { return list.indexOf(node) === index; });
+    if (!targets.length || !animation || animation === "none") return;
+    targets.forEach(function (node) {
+      var target = node;
+      target.setAttribute("data-cms-motion", animation);
+      target.style.transition = "transform .28s ease, opacity .28s ease";
+      if (animation === "fade") target.style.opacity = "0";
+      if (animation === "slide-up") target.style.transform = "translateY(12px)";
+      if (animation === "scale") target.style.transform = "scale(.97)";
+      window.requestAnimationFrame(function () { target.style.opacity = "1"; target.style.transform = "none"; });
+      if (animation === "tap" || block.tapLink) {
+        target.style.cursor = "pointer";
+        if (!target.getAttribute("data-cms-tap-bound")) {
+          target.setAttribute("data-cms-tap-bound", "true");
+          target.addEventListener("pointerdown", function () { target.style.transform = "scale(.97)"; });
+          target.addEventListener("pointerup", function () { target.style.transform = "scale(1)"; });
+          target.addEventListener("pointerleave", function () { target.style.transform = "scale(1)"; });
+          if (block.tapLink) target.addEventListener("click", function () { window.location.href = block.tapLink; });
+        }
+      }
+    });
+  }
   function applyBlock(block) {
     if (!block || block.visible === false) {
       if (block && block.sourceText) hideForText(block.sourceText, true);
@@ -118,8 +142,9 @@
     if (block.image || block.type === "image") imageForText(block.sourceText || block.label || block.value, block.image || block.value, block.alt);
     styleForText(value, block.style);
     if (block.link) {
-      findText(oldValue).forEach(function (node) { if (node.tagName === "A" || node.querySelector("a")) (node.tagName === "A" ? node : node.querySelector("a")).href = block.link; });
+      findText(value).forEach(function (node) { if (node.tagName === "A" || node.querySelector("a")) (node.tagName === "A" ? node : node.querySelector("a")).href = block.link; });
     }
+    applyMotion(oldValue, value, block);
   }
   function applyPage(page) {
     if (!page) return;
