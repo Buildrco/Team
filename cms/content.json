@@ -924,14 +924,14 @@
   ],
   "testimonials": [
     {
-      "id": "testimonial-emily-ross",
-      "clientPhoto": "./framerusercontent.com/images/Qhci2BrqufhycMHG3nlAqebgns_width=1440&height=1000.png",
-      "name": "Emily Ross",
+      "name": "Nana Kusi Agyepong",
       "role": "Business Consultant",
+      "clientPhoto": "/cms/media/1789347105201-94785.jpg",
       "quote": "Super experience",
       "rating": 5,
       "order": 1,
-      "published": true
+      "published": true,
+      "id": "testimonial-emily-ross"
     },
     {
       "id": "testimonial-kenneth",
