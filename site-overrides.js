@@ -4,7 +4,8 @@
   const EMAIL = "nookstudiosofficial@gmail.com";
   const PHONE = "+233557696771";
   const PHONE_HREF = `tel:${PHONE}`;
-  const HOME_BANNER = "./team-home-banner.jpg";
+  const HOME_BANNER =
+    "./framerusercontent.com/images/PKWNuWIsmQ7fTrryG0px7mJJCY_width=3168&height=1480.jpg";
   const MAP_URL = "https://www.google.com/maps/search/?api=1&query=Osu%2C+Accra";
   const SOCIALS = [
     { names: ["Instagram", "Dribbble", "Behance", "LinkedIn"], label: "Tiktok", href: "https://www.tiktok.com/" },
@@ -19,6 +20,7 @@
     value
       .replace(brandPattern, "Nook Studios")
       .replace(emailPattern, EMAIL)
+      .replace(/\bLagos\s*,\s*Nigeria\b/gi, "OSU, Accra")
       .replace(/\bLagos\b/gi, "OSU")
       .replace(/\bNigeria\b/gi, "Accra")
       .replace(phonePattern, PHONE);
@@ -43,7 +45,10 @@
     if (name === "href" && /^tel:/i.test(value)) updated = PHONE_HREF;
 
     const mapContext = `${name} ${value} ${element.getAttribute("data-framer-name") || ""}`.toLowerCase();
-    if ((name === "src" || name === "srcset") && /team-home-banner\.jpg/i.test(value)) {
+    if (
+      (name === "src" || name === "srcset") &&
+      /team-home-banner\.jpg|PKWNuWIsmQ7fTrryG0px7mJJCY/i.test(value)
+    ) {
       updated = HOME_BANNER;
     } else if (name === "src" && element.tagName === "IFRAME" && /map|location|address/.test(mapContext)) {
       updated = MAP_URL;
@@ -57,8 +62,8 @@
   function optimizeImages() {
     document.querySelectorAll("img").forEach((img, index) => {
       const isHomeBanner =
-        /team-home-banner\.jpg/i.test(img.getAttribute("src") || "") ||
-        /team-home-banner\.jpg/i.test(img.getAttribute("srcset") || "");
+        /team-home-banner\.jpg|PKWNuWIsmQ7fTrryG0px7mJJCY/i.test(img.getAttribute("src") || "") ||
+        /team-home-banner\.jpg|PKWNuWIsmQ7fTrryG0px7mJJCY/i.test(img.getAttribute("srcset") || "");
 
       img.decoding = "async";
       if (isHomeBanner) {
