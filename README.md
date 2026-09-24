@@ -37,12 +37,21 @@ Apply the migration through the Supabase SQL editor or Supabase CLI. It seeds th
 About, Works, Services, and Contact pages, current navigation, the five requested team members,
 logo marquee content, and local approved image paths.
 
-After the first user signs up through Supabase Auth, promote that account to admin from the
-Supabase SQL editor:
+The CMS presents a username/password first-admin flow at `/admin/login`. Enter a username and
+password through the CMS itself; Supabase Auth stores the password securely and the browser keeps
+only the normal refreshable session. The first account can claim the `admin` role automatically.
+The username is mapped internally to a non-deliverable Auth identity, so the CMS does not ask for
+an email address.
+
+For that flow to work, turn off **Authentication → Providers → Email → Confirm email**. No email
+is sent or needed for the internal identity. Subsequent users can be added through Auth and
+assigned a role in the CMS Users screen.
+
+If you need to promote an existing Auth user manually, use:
 
 ```sql
 update public.profiles
-set role = 'admin'
+set role = 'admin', username = 'your-username'
 where email = 'your-email@example.com';
 ```
 

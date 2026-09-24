@@ -44,6 +44,9 @@ import { supabase } from "./lib/supabase";
 import "./styles.css";
 
 const ASSET = (path) => `/${path}`;
+const INTERNAL_AUTH_DOMAIN = "@nook-studios.internal";
+const normaliseUsername = (value) => value.trim().toLowerCase().replace(/[^a-z0-9._-]/g, "");
+const usernameToEmail = (username) => `${normaliseUsername(username)}${INTERNAL_AUTH_DOMAIN}`;
 const FALLBACK_NAV = [
   { label: "Home", url: "/" },
   { label: "About", url: "/about" },
@@ -302,8 +305,9 @@ function PublicPage({ slug }) {
 function LoginPage() {
   const { session, loading } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [mode, setMode] = useState("login");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   useEffect(() => { if (!loading && session) navigate("/admin/dashboard", { replace: true }); }, [loading, session, navigate]);
@@ -313,15 +317,25 @@ function LoginPage() {
     setError("");
     try {
       requireSupabase();
-      const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
+      const email = usernameToEmail(username);
+      if (!normaliseUsername(username)) throw new Error("Enter a username.");
+      const result = mode === "create"
+        ? await supabase.auth.signUp({ email, password, options: { data: { username: normaliseUsername(username), full_name: username.trim() } } })
+        : await supabase.auth.signInWithPassword({ email, password });
+      const authError = result.error;
       if (authError) throw authError;
+      if (mode === "create" && result.data.user) {
+        const { error: claimError } = await supabase.rpc("claim_first_admin", { p_username: normaliseUsername(username) });
+        if (claimError && !/already claimed|not available/i.test(claimError.message)) throw claimError;
+        if (!result.data.session) throw new Error("Account created. Email confirmation is enabled in Supabase; disable it under Authentication → Providers → Email, then sign in with your username.");
+      }
     } catch (authError) {
       setError(getErrorMessage(authError));
     } finally {
       setBusy(false);
     }
   }
-  return <main className="login-page"><div className="login-art"><Link to="/" className="brand brand-light"><img src={ASSET("nook-studios-logo.png")} alt="Nook Studios" /><span>NOOK<br />STUDIOS</span></Link><div><p className="eyebrow">Content, with intention.</p><h1>Make the work.<br /><em>Ship the change.</em></h1></div></div><div className="login-panel"><div className="login-form"><span className="admin-kicker">Nook Studios CMS</span><h2>Welcome back.</h2><p>Sign in to manage the published studio site.</p>{!supabase && <ConfigNotice admin />}{error && <div className="form-error">{error}</div>}<form onSubmit={submit}><label>Email address<input type="email" value={email} onChange={(event) => setEmail(event.target.value)} required autoComplete="email" /></label><label>Password<input type="password" value={password} onChange={(event) => setPassword(event.target.value)} required autoComplete="current-password" /></label><button disabled={busy || !supabase} className="button button-dark button-wide">{busy ? <Loader2 className="spin" size={17} /> : "Sign in"} {!busy && <ArrowRight size={16} />}</button></form><Link className="back-home" to="/"><ArrowLeft size={15} /> Back to website</Link></div></div></main>;
+  return <main className="login-page"><div className="login-art"><Link to="/" className="brand brand-light"><img src={ASSET("nook-studios-logo.png")} alt="Nook Studios" /><span>NOOK<br />STUDIOS</span></Link><div><p className="eyebrow">Content, with intention.</p><h1>Make the work.<br /><em>Ship the change.</em></h1></div></div><div className="login-panel"><div className="login-form"><span className="admin-kicker">Nook Studios CMS</span><h2>{mode === "create" ? "Create your admin." : "Welcome back."}</h2><p>{mode === "create" ? "Create the first admin account with a username and password." : "Sign in with your Nook username and password."}</p>{!supabase && <ConfigNotice admin />}{error && <div className="form-error">{error}</div>}<form onSubmit={submit}><label>Username<input type="text" value={username} onChange={(event) => setUsername(event.target.value)} required autoComplete="username" placeholder="desmond" /></label><label>Password<input type="password" value={password} onChange={(event) => setPassword(event.target.value)} required minLength={8} autoComplete={mode === "create" ? "new-password" : "current-password"} /></label><button disabled={busy || !supabase} className="button button-dark button-wide">{busy ? <Loader2 className="spin" size={17} /> : mode === "create" ? "Create admin account" : "Sign in"} {!busy && <ArrowRight size={16} />}</button></form><button className="login-mode-toggle" onClick={() => { setMode((value) => value === "login" ? "create" : "login"); setError(""); }}>{mode === "create" ? "Already have an account? Sign in" : "First time here? Create the admin account"}</button><Link className="back-home" to="/"><ArrowLeft size={15} /> Back to website</Link></div></div></main>;
 }
 
 function RequireAdmin({ children }) {
