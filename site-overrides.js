@@ -11,6 +11,7 @@
     { names: ["Instagram", "Dribbble", "Behance", "LinkedIn"], label: "Tiktok", href: "https://www.tiktok.com/" },
     { names: ["Instagram", "Dribbble", "Behance", "LinkedIn"], label: "YouTube", href: "https://www.youtube.com/" },
   ];
+  const ABOUT_IMAGES = ["./about-team-1.jpg", "./about-team-2.jpg", "./about-team-3.jpg", "./about-team-4.jpg"];
 
   const brandPattern = /\bagenmint\b|\bdunhill\b/gi;
   const emailPattern = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi;
@@ -113,6 +114,30 @@
     });
   }
 
+  function updateAboutImages() {
+    if (!/about/i.test(window.location.pathname)) return;
+    const mission = [...document.querySelectorAll("body *")].find((element) =>
+      /^our\s+mission$/i.test(element.textContent.trim())
+    );
+    if (!mission) return;
+
+    const images = [...document.querySelectorAll("img")];
+    let started = false;
+    let replaced = 0;
+    images.forEach((image) => {
+      if (!started) {
+        const position = mission.compareDocumentPosition(image);
+        started = Boolean(position & Node.DOCUMENT_POSITION_FOLLOWING);
+      }
+      if (!started || replaced >= ABOUT_IMAGES.length) return;
+      image.src = ABOUT_IMAGES[replaced];
+      image.removeAttribute("srcset");
+      image.loading = "lazy";
+      image.decoding = "async";
+      replaced += 1;
+    });
+  }
+
   function scrub(root = document) {
     rewriteTextNodes(root);
     root.querySelectorAll?.("*").forEach((element) => {
@@ -123,6 +148,7 @@
     optimizeImages();
     updateSocials();
     updateMapEmbeds();
+    updateAboutImages();
   }
 
   const start = () => {
@@ -134,6 +160,7 @@
         });
       });
       updateSocials();
+      updateAboutImages();
     });
     observer.observe(document.documentElement, { childList: true, subtree: true });
   };
