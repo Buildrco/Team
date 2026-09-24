@@ -139,13 +139,8 @@
   function hideAboutSection(pattern) {
     const heading = findAboutHeading(pattern);
     if (!heading) return;
-    let section = heading;
-    for (let i = 0; i < 6 && section.parentElement && section.parentElement !== document.body; i += 1) {
-      const parent = section.parentElement;
-      if (parent.textContent.length > 6500) break;
-      section = parent;
-    }
-    section.style.display = "none";
+    const section = heading.closest("section");
+    if (section && section !== document.body) section.style.display = "none";
   }
 
   function removeAboutGallery() {
@@ -197,9 +192,11 @@
   }
 
   function updateAboutSections() {
-    // Keep the About route intact until its actual section wrappers are known.
-    // Broad ancestor hiding can hide the entire Framer page container.
-    rewriteSplitBranding();
+    if (!/about/i.test(window.location.pathname)) return;
+    removeAboutGallery();
+    hideAboutSection(/awards?\s*(and|&)?\s*recognition/i);
+    hideAboutSection(/find\s+us\s+nearby/i);
+    renderAboutTeam();
   }
 
   function scrub(root = document) {
