@@ -129,73 +129,118 @@
     });
   }
 
-  function findAboutHeading(pattern) {
-    return [...document.querySelectorAll("h1, h2, h3, h4, h5, h6, [data-framer-name]")].find((element) => {
-      const text = element.textContent.trim();
-      return text.length < 160 && pattern.test(text);
+  function findAboutMarker(pattern) {
+    const candidates = [...document.querySelectorAll("body *")].filter((element) => {
+      if (element.closest(".nook-about-team-section")) return false;
+      const text = element.textContent.trim().replace(/\s+/g, " ");
+      return text.length > 0 && text.length < 280 && pattern.test(text);
     });
+    return candidates.sort((a, b) => a.textContent.length - b.textContent.length)[0] || null;
   }
 
-  function hideAboutSection(pattern) {
-    const heading = findAboutHeading(pattern);
-    if (!heading) return;
-    const section = heading.closest("section");
-    if (section && section !== document.body) section.style.display = "none";
+  function safeAboutBlock(marker, limit = 1800) {
+    if (!marker) return null;
+    let block = marker;
+    let current = marker;
+    for (let i = 0; i < 8; i += 1) {
+      const parent = current.parentElement;
+      if (!parent || parent === document.body || parent === document.documentElement) break;
+      const textLength = parent.textContent.trim().length;
+      if (textLength > limit || parent.querySelector("nav, header")) break;
+      if (parent.children.length > 1) block = parent;
+      current = parent;
+    }
+    if (block === document.body || block === document.documentElement) return null;
+    if (block.querySelectorAll("img").length > 8) return null;
+    return block;
+  }
+
+  function hideAboutMarker(pattern) {
+    const block = safeAboutBlock(findAboutMarker(pattern));
+    if (block) block.style.display = "none";
+  }
+
+  function hideImageBlock(image) {
+    let block = image;
+    let current = image;
+    for (let i = 0; i < 5; i += 1) {
+      const parent = current.parentElement;
+      if (!parent || parent === document.body) break;
+      const name = (parent.getAttribute("data-framer-name") || "").toLowerCase();
+      const textLength = parent.textContent.trim().length;
+      if (name.includes("card") || name.includes("image") || (parent.children.length > 1 && textLength < 900)) {
+        block = parent;
+      }
+      if (textLength > 1200) break;
+      current = parent;
+    }
+    if (block !== document.body && block !== document.documentElement) block.style.display = "none";
   }
 
   function removeAboutGallery() {
-    if (!/about/i.test(window.location.pathname)) return;
-    const mission = [...document.querySelectorAll("body *")].find((element) =>
-      /^our\s+mission$/i.test(element.textContent.trim())
-    );
-    const creative = findAboutHeading(/our\s+creative\s+team/i);
+    const mission = findAboutMarker(/^our\s+mission$/i);
+    const creative = findAboutMarker(/our\s+creative\s+team/i);
     if (!mission || !creative) return;
-    const images = [...document.querySelectorAll("img")];
     let started = false;
-    images.forEach((image) => {
-      if (!started) {
-        const position = mission.compareDocumentPosition(image);
-        started = Boolean(position & Node.DOCUMENT_POSITION_FOLLOWING);
-      }
-      if (!started || creative.compareDocumentPosition(image) & Node.DOCUMENT_POSITION_FOLLOWING) return;
-      const card = image.closest('[data-framer-name="Image Wrapper"]')?.parentElement || image.parentElement;
-      if (card) card.style.display = "none";
+    let removed = 0;
+    document.querySelectorAll("img").forEach((image) => {
+      if (!started) started = Boolean(mission.compareDocumentPosition(image) & Node.DOCUMENT_POSITION_FOLLOWING);
+      if (!started || removed >= 4 || creative.compareDocumentPosition(image) & Node.DOCUMENT_POSITION_FOLLOWING) return;
+      hideImageBlock(image);
+      removed += 1;
     });
   }
 
+  function createLogoMarquee() {
+    const marquee = document.createElement("div");
+    marquee.className = "nook-logo-marquee";
+    marquee.setAttribute("aria-label", "Nook Studios services");
+    const labels = ["BRANDING", "SEO", "CONTENT", "DIGITAL REACH", "WEB DESIGN", "STRATEGY"];
+    marquee.innerHTML = `<div class="nook-logo-track">${labels.concat(labels).map((label) => `<span>${label}<b>✦</b></span>`).join("")}</div>`;
+    return marquee;
+  }
+
   function renderAboutTeam() {
-    if (!/about/i.test(window.location.pathname) || document.querySelector(".nook-team-grid")) return;
-    const heading = findAboutHeading(/our\s+(creative\s+)?team/i);
-    if (!heading) return;
-    let afterHeading = false;
-    let hidden = 0;
+    if (!/about/i.test(window.location.pathname) || document.querySelector(".nook-about-team-section")) return;
+    const marker = findAboutMarker(/our\s+creative\s+team/i);
+    if (!marker) return;
+    const oldTeamBlock = safeAboutBlock(marker);
+    if (!oldTeamBlock || oldTeamBlock === document.body) return;
+
+    let afterTeam = false;
+    let beforeAlien = true;
+    const alien = findAboutMarker(/our\s+alien/i);
     document.querySelectorAll("img").forEach((image) => {
-      if (!afterHeading) {
-        afterHeading = Boolean(heading.compareDocumentPosition(image) & Node.DOCUMENT_POSITION_FOLLOWING);
-      }
-      if (!afterHeading || hidden >= TEAM_MEMBERS.length || image.closest(".nook-team-grid")) return;
-      const card = image.closest('[data-framer-name="Card"]') || image.parentElement;
-      if (card) card.style.display = "none";
-      hidden += 1;
+      if (!afterTeam) afterTeam = Boolean(marker.compareDocumentPosition(image) & Node.DOCUMENT_POSITION_FOLLOWING);
+      if (alien && alien.compareDocumentPosition(image) & Node.DOCUMENT_POSITION_FOLLOWING) beforeAlien = false;
+      if (afterTeam && beforeAlien && !image.closest(".nook-about-team-section")) hideImageBlock(image);
     });
+    oldTeamBlock.style.display = "none";
+
+    const section = document.createElement("section");
+    section.className = "nook-about-team-section";
+    section.innerHTML = `<div class="nook-about-team-heading"><h2>Our Creative Team</h2><p>Explore the services our clients love most, designed to deliver exceptional results.</p></div>`;
+    section.appendChild(createLogoMarquee());
     const grid = document.createElement("div");
     grid.className = "nook-team-grid";
     grid.innerHTML = TEAM_MEMBERS.map(
       ([src, name, title]) =>
         `<article class="nook-team-card"><img src="${src}" loading="lazy" decoding="async" alt="${name}"><h3>${name}</h3><p>${title}</p></article>`
     ).join("");
+    section.appendChild(grid);
+
     const style = document.createElement("style");
     style.textContent =
-      ".nook-team-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin:40px 0}.nook-team-card{overflow:hidden;border-radius:16px;background:#fff}.nook-team-card img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover}.nook-team-card h3,.nook-team-card p{margin:12px 16px 0}.nook-team-card p{margin-bottom:16px;color:#667085}@media(max-width:800px){.nook-team-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}@media(max-width:520px){.nook-team-grid{grid-template-columns:1fr}}";
+      ".nook-about-team-section{width:min(1120px,calc(100% - 48px));margin:56px auto 80px}.nook-about-team-heading h2{margin:0;font-size:clamp(32px,5vw,64px);line-height:1.05}.nook-about-team-heading p{margin:16px 0 0;max-width:620px;font-size:18px;line-height:1.5}.nook-logo-marquee{overflow:hidden;width:100%;margin:46px 0 42px;border-top:1px solid currentColor;border-bottom:1px solid currentColor;padding:18px 0}.nook-logo-track{display:flex;width:max-content;animation:nook-logo-scroll 26s linear infinite}.nook-logo-track span{display:flex;align-items:center;gap:28px;margin-right:28px;white-space:nowrap;font-size:14px;letter-spacing:.16em;font-weight:700}.nook-logo-track b{font-size:20px;font-weight:400}@keyframes nook-logo-scroll{to{transform:translateX(-50%)}}.nook-team-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}.nook-team-card{overflow:hidden;border-radius:16px;background:#fff}.nook-team-card img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover}.nook-team-card h3,.nook-team-card p{margin:12px 16px 0}.nook-team-card p{margin-bottom:16px;color:#667085}@media(max-width:800px){.nook-about-team-section{width:min(100% - 32px,620px)}.nook-team-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}@media(max-width:520px){.nook-team-grid{grid-template-columns:1fr}}";
     document.head.appendChild(style);
-    heading.parentElement?.appendChild(grid);
+    oldTeamBlock.parentElement.insertBefore(section, oldTeamBlock);
   }
 
   function updateAboutSections() {
     if (!/about/i.test(window.location.pathname)) return;
     removeAboutGallery();
-    hideAboutSection(/awards?\s*(and|&)?\s*recognition/i);
-    hideAboutSection(/find\s+us\s+nearby/i);
+    hideAboutMarker(/awards?\s*(and|&)?\s*recognition/i);
+    hideAboutMarker(/find\s+us\s+nearby/i);
     renderAboutTeam();
   }
 
