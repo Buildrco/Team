@@ -197,11 +197,9 @@
   }
 
   function updateAboutSections() {
-    if (!/about/i.test(window.location.pathname)) return;
-    removeAboutGallery();
-    hideAboutSection(/awards?\s*(and|&)?\s*recognition/i);
-    hideAboutSection(/find\s+us\s+nearby/i);
-    renderAboutTeam();
+    // Keep the About route intact until its actual section wrappers are known.
+    // Broad ancestor hiding can hide the entire Framer page container.
+    rewriteSplitBranding();
   }
 
   function scrub(root = document) {
