@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nook Studios Admin</title>
+  <style>
+    :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#172033;background:#f5f4ef;line-height:1.45}
+    *{box-sizing:border-box}body{margin:0}button,input,textarea,select{font:inherit}button{cursor:pointer}
+    .hidden{display:none!important}.muted{color:#6c7484}.error{padding:12px 14px;border-radius:10px;background:#ffe7e4;color:#9d2e2a;font-size:14px}
+    .auth{min-height:100vh;display:grid;place-items:center;padding:24px;background:#111a2c}.auth-card{width:min(440px,100%);padding:34px;border-radius:22px;background:#fff;box-shadow:0 25px 80px #07102066}
+    .brand{display:flex;align-items:center;gap:10px;color:#172033;text-decoration:none;font-weight:800;letter-spacing:.08em}.brand-mark{width:38px;height:38px;border-radius:11px;background:#c7f36b;color:#172033;display:grid;place-items:center;font-size:12px}
+    .auth h1{margin:34px 0 8px;font-size:36px;letter-spacing:-.04em}.auth p{margin:0 0 28px;color:#6c7484}.field{display:grid;gap:7px;margin:16px 0}.field span{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#586174}.field input,.field textarea,.field select,.search{width:100%;padding:12px 13px;border:1px solid #dce0e7;border-radius:9px;background:#fff;color:#172033;outline:none}.field textarea{min-height:100px;resize:vertical}.field input:focus,.field textarea:focus,.field select:focus,.search:focus{border-color:#8ea837;box-shadow:0 0 0 3px #c7f36b55}
+    .button{border:0;border-radius:9px;padding:11px 15px;font-weight:750;display:inline-flex;align-items:center;gap:8px}.button-primary{background:#172033;color:#fff}.button-accent{background:#c7f36b;color:#172033}.button-quiet{background:#eef0f3;color:#172033}.button-danger{background:#ffe7e4;color:#9d2e2a}.button:disabled{opacity:.55;cursor:not-allowed}
+    .auth .button{width:100%;justify-content:center;margin-top:8px}.auth-switch{margin-top:18px;width:100%;border:0;background:transparent;color:#596276;font-size:14px}
+    .app{min-height:100vh;display:grid;grid-template-columns:245px 1fr}.sidebar{background:#111a2c;color:#fff;padding:24px 16px;display:flex;flex-direction:column;gap:28px}.sidebar .brand{color:#fff;padding:0 10px}.sidebar .brand-mark{background:#c7f36b}.workspace{padding:16px 12px;border:1px solid #ffffff1f;border-radius:13px}.workspace small{display:block;color:#9da7b9;margin-top:4px}.nav{display:grid;gap:5px}.nav button{border:0;background:transparent;color:#b9c1d1;text-align:left;padding:11px 12px;border-radius:9px}.nav button:hover,.nav button.active{background:#ffffff14;color:#fff}.sidebar-bottom{margin-top:auto;display:grid;gap:10px}.sidebar-bottom button{border:0;background:transparent;color:#b9c1d1;text-align:left;padding:10px 12px}
+    .main{min-width:0;padding:36px clamp(20px,4vw,60px)}.topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:30px}.eyebrow{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#6d7482}.topbar h1{margin:5px 0 4px;font-size:38px;letter-spacing:-.045em}.topbar p{margin:0;color:#6c7484}.actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end}
+    .cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:24px}.card,.panel{background:#fff;border:1px solid #e1e3e8;border-radius:15px;padding:20px}.metric span{font-size:12px;color:#6c7484}.metric strong{display:block;font-size:34px;margin:9px 0 2px;letter-spacing:-.05em}.panel-header{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:18px}.panel-header h2{margin:0;font-size:20px}.table{display:grid;gap:1px;background:#e1e3e8;border:1px solid #e1e3e8;border-radius:12px;overflow:hidden}.row{background:#fff;display:grid;grid-template-columns:minmax(0,1fr) 120px 140px 100px;gap:14px;align-items:center;padding:14px 16px}.row.head{background:#f7f7f4;color:#6c7484;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}.row h3{font-size:15px;margin:0}.row p{font-size:13px;margin:3px 0 0;color:#6c7484}.row-actions{display:flex;justify-content:flex-end;gap:7px}.badge{display:inline-flex;width:max-content;padding:5px 8px;border-radius:99px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;background:#edf0f4;color:#566073}.badge.published{background:#e8f7d0;color:#487118}.badge.draft{background:#fff1cf;color:#8a5f08}
+    .toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}.toolbar .search{max-width:330px}.empty{padding:40px;text-align:center;color:#6c7484;background:#fff;border:1px dashed #ccd1da;border-radius:14px}.editor{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:20px}.section-card{margin-bottom:14px}.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px}.section-title h3{margin:0;font-size:17px}.section-actions{display:flex;gap:6px}.section-actions button{border:0;background:#eef0f3;border-radius:7px;padding:6px 9px;color:#566073}.section-card textarea{min-height:90px}.check{display:flex;align-items:center;gap:8px;color:#586174;font-size:14px}.check input{accent-color:#8ea837}.json{font-family:ui-monospace,monospace;font-size:12px}
+    .media-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px}.media img{width:100%;aspect-ratio:1.25;object-fit:cover;border-radius:10px;background:#eef0f3}.media b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:9px}.media small{display:block;color:#6c7484;margin:3px 0 10px}.setting-grid{max-width:680px}.user-row,.nav-row{display:grid;grid-template-columns:1fr 170px 120px;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #e7e8ec}.nav-row{grid-template-columns:1fr 1fr 80px}.user-row:last-child,.nav-row:last-child{border-bottom:0}.user-row b{display:block}.user-row small{color:#6c7484}.toast{position:fixed;right:24px;bottom:24px;padding:13px 16px;background:#172033;color:#fff;border-radius:10px;box-shadow:0 12px 30px #07102033}
+    @media(max-width:900px){.app{grid-template-columns:1fr}.sidebar{position:sticky;top:0;z-index:5;padding:12px 16px;display:block}.sidebar .workspace,.sidebar-bottom{display:none}.sidebar .brand{margin-bottom:10px}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap}.main{padding:24px 16px}.cards{grid-template-columns:repeat(2,1fr)}.editor{grid-template-columns:1fr}.row{grid-template-columns:minmax(0,1fr) 95px}.row>:nth-child(3),.row>:nth-child(4){display:none}}
+    @media(max-width:520px){.topbar{display:block}.actions{justify-content:flex-start;margin-top:16px}.cards{gap:9px}.card{padding:14px}.metric strong{font-size:27px}.row{padding:12px}.nav-row,.user-row{grid-template-columns:1fr}.nav-row input,.user-row select{width:100%}}
+  </style>
+</head>
+<body>
+  <section id="auth" class="auth">
+    <div class="auth-card">
+      <a class="brand" href="/"><span class="brand-mark">NS</span><span>NOOK STUDIOS</span></a>
+      <h1>Admin workspace</h1>
+      <p>Manage published content without changing the public website.</p>
+      <div id="auth-error" class="error hidden"></div>
+      <form id="auth-form">
+        <label class="field"><span>Username</span><input id="username" autocomplete="username" placeholder="desmond" required /></label>
+        <label class="field"><span>Password</span><input id="password" type="password" autocomplete="current-password" required /></label>
+        <button class="button button-primary" type="submit">Sign in</button>
+      </form>
+      <button id="auth-switch" class="auth-switch" type="button">First time here? Create the first admin account</button>
+    </div>
+  </section>
+
+  <section id="app" class="app hidden">
+    <aside class="sidebar">
+      <a class="brand" href="/"><span class="brand-mark">NS</span><span>NOOK STUDIOS</span></a>
+      <div class="workspace"><span class="eyebrow">Private workspace</span><strong>Content admin</strong><small>Public site stays separate</small></div>
+      <nav class="nav">
+        <button data-view="dashboard" class="active">Dashboard</button>
+        <button data-view="pages">Pages</button>
+        <button data-view="navigation">Navigation</button>
+        <button data-view="media">Media</button>
+        <button data-view="settings">Settings</button>
+        <button data-view="users">Users</button>
+      </nav>
+      <div class="sidebar-bottom"><button id="preview">Open public website</button><button id="signout">Sign out</button></div>
+    </aside>
+    <main class="main"><div id="screen"></div></main>
+  </section>
+  <div id="toast" class="toast hidden"></div>
+
+  <script type="module">
+    const $ = (selector) => document.querySelector(selector);
+    const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[char]));
+    const usernameEmail = (value) => `${String(value).trim().toLowerCase().replace(/[^a-z0-9._-]/g, "")}@nook-studios.internal`;
+    const state = { client:null, profile:null, pages:[], view:"dashboard", page:null, site:null, creating:false };
+
+    function message(error){ return error?.message || error?.error_description || String(error || "Something went wrong."); }
+    function showError(text){ const el=$("#auth-error"); el.textContent=text; el.classList.remove("hidden"); }
+    function clearError(){ $("#auth-error").classList.add("hidden"); }
+    function toast(text){ const el=$("#toast"); el.textContent=text; el.classList.remove("hidden"); setTimeout(()=>el.classList.add("hidden"),2800); }
+    function setView(view){ state.view=view; document.querySelectorAll("[data-view]").forEach((button)=>button.classList.toggle("active",button.dataset.view===view)); render(); }
+    async function loadConfig(){
+      const response=await fetch("/api/admin-config",{headers:{Accept:"application/json"}});
+      const data=await response.json();
+      if(!response.ok) throw new Error(data.error || "Admin configuration is unavailable.");
+      const { createClient }=await import("https://esm.sh/@supabase/supabase-js@2.57.4");
+      state.client=createClient(data.url,data.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+    }
+    async function getProfile(){
+      const {data:{session}}=await state.client.auth.getSession();
+      if(!session?.user) return null;
+      const {data,error}=await state.client.from("profiles").select("*").eq("id",session.user.id).maybeSingle();
+      if(error) throw error;
+      if(!data || !["admin","editor"].includes(data.role)) throw new Error("This account does not have admin or editor access.");
+      return data;
+    }
+    async function enterApp(){
+      state.profile=await getProfile();
+      if(!state.profile) return;
+      $("#auth").classList.add("hidden"); $("#app").classList.remove("hidden");
+      await loadSite(); await loadPages(); render();
+    }
+    async function loadSite(){ const {data,error}=await state.client.from("sites").select("*").eq("slug","nook-studios").maybeSingle(); if(error) throw error; state.site=data; }
+    async function loadPages(){ const {data,error}=await state.client.from("pages").select("*").order("updated_at",{ascending:false}); if(error) throw error; state.pages=data||[]; }
+    async function login(event){
+      event.preventDefault(); clearError();
+      const username=$("#username").value.trim(), password=$("#password").value;
+      try{
+        const result=state.creating
+          ? await state.client.auth.signUp({email:usernameEmail(username),password,options:{data:{username,full_name:username}}})
+          : await state.client.auth.signInWithPassword({email:usernameEmail(username),password});
+        if(result.error) throw result.error;
+        if(state.creating && result.data.user){
+          const claim=await state.client.rpc("claim_first_admin",{p_username:username.toLowerCase()});
+          if(claim.error && !/already claimed|not available/i.test(claim.error.message)) throw claim.error;
+          if(!result.data.session) throw new Error("Account created. Disable Supabase email confirmation before signing in.");
+        }
+        await enterApp();
+      }catch(error){ showError(message(error)); }
+    }
+    function render(){
+      if(state.view==="dashboard") return renderDashboard();
+      if(state.view==="pages") return renderPages();
+      if(state.view==="navigation") return renderNavigation();
+      if(state.view==="media") return renderMedia();
+      if(state.view==="settings") return renderSettings();
+      if(state.view==="users") return renderUsers();
+    }
+    function header(eyebrow,title,description,actions=""){ return `<div class="topbar"><div><span class="eyebrow">${esc(eyebrow)}</span><h1>${esc(title)}</h1><p>${esc(description)}</p></div><div class="actions">${actions}</div></div>`; }
+    function renderDashboard(){
+      const published=state.pages.filter((page)=>page.status==="published").length;
+      const drafts=state.pages.filter((page)=>page.status==="draft").length;
+      $("#screen").innerHTML=header("Overview","Good morning.","The public website remains unchanged while you manage its content.",`<button class="button button-primary" data-action="new-page">New page</button>`)+`<div class="cards"><div class="card metric"><span>Total pages</span><strong>${state.pages.length}</strong><small class="muted">In the content database</small></div><div class="card metric"><span>Published</span><strong>${published}</strong><small class="muted">Visible to visitors</small></div><div class="card metric"><span>Drafts</span><strong>${drafts}</strong><small class="muted">Not yet public</small></div><div class="card metric"><span>Role</span><strong>${esc(state.profile.role)}</strong><small class="muted">${esc(state.profile.email||"")}</small></div></div><section class="panel"><div class="panel-header"><h2>Recent pages</h2><button class="button button-quiet" data-view="pages">View all</button></div>${state.pages.length?`<div class="table"><div class="row head"><span>Page</span><span>Status</span><span>Updated</span><span></span></div>${state.pages.slice(0,6).map(pageRow).join("")}</div>`:`<div class="empty">No pages found in Supabase.</div>`}</section>`;
+    }
+    function pageRow(page){ return `<div class="row"><div><h3>${esc(page.title)}</h3><p>/${esc(page.slug)}</p></div><span class="badge ${esc(page.status)}">${esc(page.status)}</span><span class="muted">${page.updated_at?new Date(page.updated_at).toLocaleDateString():"—"}</span><div class="row-actions"><button class="button button-quiet" data-action="edit-page" data-id="${esc(page.id)}">Edit</button></div></div>`; }
+    function renderPages(){
+      $("#screen").innerHTML=header("Content","Pages","Edit drafts and publish only when you are ready.",`<button class="button button-primary" data-action="new-page">New page</button>`)+`<div class="toolbar"><input class="search" id="page-search" placeholder="Search pages" /><span class="muted">${state.pages.length} pages</span></div><div id="pages-list" class="table"><div class="row head"><span>Page</span><span>Status</span><span>Updated</span><span></span></div>${state.pages.map(pageRow).join("")}</div>`;
+      $("#page-search").addEventListener("input",(event)=>{ const query=event.target.value.toLowerCase(); $("#pages-list").innerHTML=`<div class="row head"><span>Page</span><span>Status</span><span>Updated</span><span></span></div>${state.pages.filter((page)=>`${page.title} ${page.slug}`.toLowerCase().includes(query)).map(pageRow).join("")}`; bindPageButtons(); });
+      bindPageButtons();
+    }
+    function bindPageButtons(){ document.querySelectorAll('[data-action="edit-page"]').forEach((button)=>button.addEventListener("click",()=>openEditor(button.dataset.id))); }
+    async function openEditor(id){
+      if(id==="new"){ state.page={id:null,title:"Untitled page",slug:`new-page-${Date.now()}`,status:"draft",seo_title:"",seo_description:"",sections:[]}; renderEditor(); return; }
+      const page=state.pages.find((item)=>item.id===id);
+      const sectionsResult=await state.client.from("sections").select("*").eq("page_id",id).order("sort_order");
+      if(sectionsResult.error){ toast(message(sectionsResult.error)); return; }
+      const sections=sectionsResult.data||[];
+      const itemResult=sections.length?await state.client.from("section_items").select("*").in("section_id",sections.map((item)=>item.id)).order("sort_order"):{data:[],error:null};
+      if(itemResult.error){toast(message(itemResult.error));return;}
+      state.page={...page,sections:sections.map((section)=>({...section,items:(itemResult.data||[]).filter((item)=>item.section_id===section.id)}))}; renderEditor();
+    }
+    function renderEditor(){
+      const page=state.page;
+      $("#screen").innerHTML=header("Page editor",page.title,"Changes stay private until you publish.",`<button class="button button-quiet" data-action="back-pages">Back to pages</button><button class="button button-accent" data-action="save-draft">Save draft</button><button class="button button-primary" data-action="publish">Publish</button>`)+`<div class="editor"><div><section class="panel"><div class="field"><span>Page title</span><input data-page-field="title" value="${esc(page.title)}" /></div><div class="field"><span>Slug</span><input data-page-field="slug" value="${esc(page.slug)}" /></div><div class="field"><span>SEO title</span><input data-page-field="seo_title" value="${esc(page.seo_title)}" /></div><div class="field"><span>SEO description</span><textarea data-page-field="seo_description">${esc(page.seo_description)}</textarea></div></section><div id="sections">${page.sections.length?page.sections.map(sectionEditor).join(""):`<div class="empty">No sections yet. Add the first section from the inspector.</div>`}</div></div><aside><section class="panel"><div class="panel-header"><h2>Page status</h2></div><p class="muted">Current status: <span class="badge ${esc(page.status)}">${esc(page.status)}</span></p><label class="field"><span>Add section type</span><select id="new-section-type"><option value="hero">Hero</option><option value="rich_text">Rich text</option><option value="services_grid">Services grid</option><option value="team_grid">Team grid</option><option value="portfolio_grid">Portfolio grid</option><option value="cta">Call to action</option></select></label><button class="button button-accent" data-action="add-section">Add section</button></section></aside></div>`;
+      document.querySelectorAll("[data-page-field]").forEach((input)=>input.addEventListener("input",()=>{page[input.dataset.pageField]=input.value;}));
+      document.querySelectorAll("[data-section-field]").forEach((input)=>input.addEventListener("input",()=>{const section=page.sections.find((item)=>item.id===input.dataset.id); if(section) section[input.dataset.sectionField]=input.value;}));
+      document.querySelectorAll("[data-section-visible]").forEach((input)=>input.addEventListener("change",()=>{const section=page.sections.find((item)=>item.id===input.dataset.id); if(section) section.is_visible=input.checked;}));
+      $("[data-action=back-pages]").addEventListener("click",()=>{state.view="pages";renderPages();});
+      $("[data-action=add-section]").addEventListener("click",()=>{page.sections.push({id:`new-${Date.now()}`,section_type:$("#new-section-type").value,title:"New section",subtitle:"",content:"",settings:{},is_visible:true,sort_order:page.sections.length,items:[]});renderEditor();});
+      $("[data-action=save-draft]").addEventListener("click",()=>savePage(false)); $("[data-action=publish]").addEventListener("click",()=>savePage(true));
+    }
+    function sectionEditor(section){ return `<section class="panel section-card"><div class="section-title"><h3>${esc(section.section_type)}</h3><label class="check"><input type="checkbox" data-section-visible data-id="${esc(section.id)}" ${section.is_visible===false?"":"checked"} /> Visible</label></div><div class="field"><span>Title</span><input data-section-field="title" data-id="${esc(section.id)}" value="${esc(section.title)}" /></div><div class="field"><span>Subtitle</span><input data-section-field="subtitle" data-id="${esc(section.id)}" value="${esc(section.subtitle)}" /></div><div class="field"><span>Content</span><textarea data-section-field="content" data-id="${esc(section.id)}">${esc(section.content)}</textarea></div></section>`; }
+    async function savePage(publish){
+      const page=state.page; if(!state.site){toast("Nook Studios site record was not found.");return;}
+      try{
+        let pageId=page.id;
+        if(!pageId){const result=await state.client.from("pages").insert({site_id:state.site.id,title:page.title,slug:page.slug,page_type:"standard",status:"draft",seo_title:page.seo_title,seo_description:page.seo_description}).select().single();if(result.error)throw result.error;pageId=result.data.id;page.id=pageId;}
+        if(!publish){const revision=await state.client.from("revisions").insert({page_id:pageId,revision_data:{page},description:"draft"});if(revision.error)throw revision.error;}
+        for(const [index,section] of page.sections.entries()){
+          const payload={page_id:pageId,section_type:section.section_type,title:section.title,subtitle:section.subtitle,content:section.content,settings:section.settings||{},sort_order:index,is_visible:section.is_visible!==false};
+          if(String(section.id).startsWith("new-")){const result=await state.client.from("sections").insert(payload).select().single();if(result.error)throw result.error;section.id=result.data.id;}else{const result=await state.client.from("sections").update(payload).eq("id",section.id);if(result.error)throw result.error;}
+        }
+        const update=await state.client.from("pages").update({title:page.title,slug:page.slug,seo_title:page.seo_title,seo_description:page.seo_description,status:publish?"published":"draft",published_at:publish?new Date().toISOString():null,updated_at:new Date().toISOString()}).eq("id",pageId);if(update.error)throw update.error;
+        if(publish) await state.client.from("revisions").delete().eq("page_id",pageId).eq("description","draft");
+        await loadPages(); toast(publish?"Published to the public site.":"Draft saved."); state.view="pages"; renderPages();
+      }catch(error){toast(message(error));}
+    }
+    async function renderNavigation(){
+      const result=await state.client.from("navigation_items").select("*").order("sort_order"); if(result.error){toast(message(result.error));return;}
+      $("#screen").innerHTML=header("Site structure","Navigation","Manage links used by the public site.",`<button class="button button-primary" data-action="save-navigation">Save navigation</button>`)+`<section class="panel"><div id="nav-list">${(result.data||[]).map((item)=>`<div class="nav-row"><input data-nav-label data-id="${esc(item.id)}" value="${esc(item.label)}" /><input data-nav-url data-id="${esc(item.id)}" value="${esc(item.url)}" /><label class="check"><input type="checkbox" data-nav-visible data-id="${esc(item.id)}" ${item.is_visible?"checked":""}/> Visible</label></div>`).join("")||`<div class="empty">No navigation items found.</div>`}</div></section>`;
+      $("[data-action=save-navigation]").addEventListener("click",async()=>{for(const row of document.querySelectorAll(".nav-row")){const id=row.querySelector("[data-nav-label]").dataset.id;const result=await state.client.from("navigation_items").update({label:row.querySelector("[data-nav-label]").value,url:row.querySelector("[data-nav-url]").value,is_visible:row.querySelector("[data-nav-visible]").checked}).eq("id",id);if(result.error){toast(message(result.error));return;}}toast("Navigation saved.");});
+    }
+    async function renderMedia(){
+      const result=await state.client.from("media_assets").select("*").order("created_at",{ascending:false}); if(result.error){toast(message(result.error));return;}
+      $("#screen").innerHTML=header("Assets","Media library","Upload assets for admin-managed content.",`<label class="button button-primary">Upload image<input id="upload" type="file" accept="image/*" hidden /></label>`)+`<div class="media-grid">${(result.data||[]).map((item)=>`<article class="card media"><img src="${esc(item.public_url)}" alt="${esc(item.alt_text||item.file_name)}" /><b>${esc(item.file_name)}</b><small>${esc(item.mime_type||"image")}</small></article>`).join("")||`<div class="empty">No media assets found.</div>`}</div>`;
+      $("#upload").addEventListener("change",async(event)=>{const file=event.target.files?.[0];if(!file||!state.site)return;try{const path=`uploads/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,"-")}`;const upload=await state.client.storage.from("site-assets").upload(path,file,{upsert:false,contentType:file.type});if(upload.error)throw upload.error;const url=state.client.storage.from("site-assets").getPublicUrl(path).data.publicUrl;const row=await state.client.from("media_assets").insert({site_id:state.site.id,file_name:file.name,storage_path:path,public_url:url,alt_text:file.name,mime_type:file.type,file_size:file.size});if(row.error)throw row.error;toast("Image uploaded.");renderMedia();}catch(error){toast(message(error));}});
+    }
+    async function renderSettings(){
+      const result=await state.client.from("site_settings").select("*").order("setting_key"); if(result.error){toast(message(result.error));return;}
+      $("#screen").innerHTML=header("Configuration","Site settings","Update global values used by the admin-managed site.",`<button class="button button-primary" data-action="save-settings">Save settings</button>`)+`<section class="panel setting-grid">${(result.data||[]).map((item)=>`<label class="field"><span>${esc(item.setting_key.replaceAll("_"," "))}</span><input data-setting data-id="${esc(item.id)}" value="${esc(item.setting_value)}" /></label>`).join("")||`<div class="empty">No settings found.</div>`}</section>`;
+      $("[data-action=save-settings]").addEventListener("click",async()=>{for(const input of document.querySelectorAll("[data-setting]")){const result=await state.client.from("site_settings").update({setting_value:input.value,updated_at:new Date().toISOString()}).eq("id",input.dataset.id);if(result.error){toast(message(result.error));return;}}toast("Settings saved.");});
+    }
+    async function renderUsers(){
+      if(state.profile.role!=="admin"){toast("Only admins can manage users.");setView("dashboard");return;}
+      const result=await state.client.from("profiles").select("*").order("created_at"); if(result.error){toast(message(result.error));return;}
+      $("#screen").innerHTML=header("Access","Users","Manage roles for authenticated staff.",``)+`<section class="panel">${(result.data||[]).map((user)=>`<div class="user-row"><div><b>${esc(user.full_name||"Unnamed user")}</b><small>${esc(user.email||"")}</small></div><select data-role data-id="${esc(user.id)}"><option ${user.role==="admin"?"selected":""}>admin</option><option ${user.role==="editor"?"selected":""}>editor</option><option ${user.role==="viewer"?"selected":""}>viewer</option></select><button class="button button-quiet" data-save-role data-id="${esc(user.id)}">Save role</button></div>`).join("")||`<div class="empty">No profiles found.</div>`}</section>`;
+      document.querySelectorAll("[data-save-role]").forEach((button)=>button.addEventListener("click",async()=>{const select=document.querySelector(`[data-role][data-id="${button.dataset.id}"]`);const result=await state.client.from("profiles").update({role:select.value}).eq("id",button.dataset.id);if(result.error)toast(message(result.error));else toast("Role saved.");}));
+    }
+    document.querySelectorAll("[data-view]").forEach((button)=>button.addEventListener("click",()=>setView(button.dataset.view)));
+    $("#auth-form").addEventListener("submit",login);
+    $("#auth-switch").addEventListener("click",()=>{state.creating=!state.creating;$("#auth-switch").textContent=state.creating?"Already have an account? Sign in":"First time here? Create the first admin account";$("#auth-form button").textContent=state.creating?"Create admin account":"Sign in";$("#password").autocomplete=state.creating?"new-password":"current-password";});
+    $("#signout").addEventListener("click",async()=>{await state.client.auth.signOut();location.reload();}); $("#preview").addEventListener("click",()=>location.href="/");
+    $("[data-action=new-page]")?.addEventListener("click",()=>openEditor("new"));
+    try{await loadConfig();await enterApp();}catch(error){showError(message(error));}
+  </script>
+</body>
+</html>
