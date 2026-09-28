@@ -278,3 +278,77 @@
     start();
   }
 })();
+
+/* Nook CMS bridge: applies published admin overrides without replacing the public design. */
+(() => {
+  "use strict";
+  if (window.__nookCmsBridgeLoaded) return;
+  window.__nookCmsBridgeLoaded = true;
+
+  const pagePath = () => {
+    const value = window.location.pathname.replace(/\/+$/, "");
+    return value || "/";
+  };
+
+  const rest = async (base, key, path) => {
+    const response = await fetch(base + path, {
+      headers: { apikey: key, Authorization: "Bearer " + key, Accept: "application/json" },
+    });
+    if (!response.ok) throw new Error("CMS request failed");
+    return response.json();
+  };
+
+  const apply = (rows) => {
+    rows.forEach((row) => {
+      const value = row.published_value || {};
+      let elements = [];
+      try { elements = document.querySelectorAll(row.source_selector); } catch (_) { return; }
+      elements.forEach((element) => {
+        if (["text", "heading", "link", "button"].includes(row.element_type)) {
+          if (value.html) element.innerHTML = value.html;
+          else if (typeof value.text === "string") element.textContent = value.text;
+        }
+        if (typeof value.href === "string" && element.matches("a")) element.setAttribute("href", value.href);
+        if (typeof value.src === "string" && element.matches("img,source,video")) {
+          element.setAttribute("src", value.src);
+          element.removeAttribute("srcset");
+        }
+        if (typeof value.alt === "string" && element.matches("img")) element.setAttribute("alt", value.alt);
+        if (value.visible === false) element.style.display = "none";
+        else if (value.visible === true) element.style.removeProperty("display");
+        if (value.order !== undefined && value.order !== null) element.style.order = String(value.order);
+        Object.entries(value.attributes || {}).forEach(([name, attrValue]) => {
+          if (attrValue === null || attrValue === false) element.removeAttribute(name);
+          else element.setAttribute(name, String(attrValue));
+        });
+        Object.entries(value.styles || {}).forEach(([name, styleValue]) => {
+          if (name.startsWith("--")) element.style.setProperty(name, styleValue == null ? "" : String(styleValue));
+          else element.style[name] = styleValue == null ? "" : String(styleValue);
+        });
+      });
+    });
+  };
+
+  async function boot() {
+    try {
+      const config = await (await fetch("/api/admin-config", { headers: { Accept: "application/json" } })).json();
+      if (!config.url || !config.key) return;
+      const base = config.url.replace(/\/$/, "");
+      const sites = await rest(base, config.key, "/rest/v1/sites?slug=eq.nook-studios&select=id");
+      if (!sites[0]) return;
+      const path = encodeURIComponent(pagePath());
+      const rows = await rest(base, config.key, "/rest/v1/cms_elements?site_id=eq." + sites[0].id + "&page_path=eq." + path + "&is_published=eq.true&select=source_selector,element_type,published_value,sort_order&order=sort_order.asc");
+      if (!rows.length) return;
+      const run = () => apply(rows);
+      run();
+      window.addEventListener("load", run, { once: true });
+      let timer;
+      new MutationObserver(() => { clearTimeout(timer); timer = setTimeout(run, 250); }).observe(document.body, { childList: true, subtree: true });
+    } catch (_) {
+      // The public site remains unchanged if the CMS is unavailable.
+    }
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, { once: true });
+  else boot();
+})();
