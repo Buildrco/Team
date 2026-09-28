@@ -86,9 +86,12 @@
     }
     async function enterApp(){
       state.profile=await getProfile();
-      if(!state.profile) return;
-      $("#auth").classList.add("hidden"); $("#app").classList.remove("hidden");
-      await loadSite(); await loadPages(); render();
+      if(!state.profile){ showError("No staff profile is attached to this session."); return; }
+      await loadSite();
+      await loadPages();
+      $("#auth").classList.add("hidden");
+      $("#app").classList.remove("hidden");
+      render();
     }
     async function loadSite(){ const {data,error}=await state.client.from("sites").select("*").eq("slug","nook-studios").maybeSingle(); if(error) throw error; state.site=data; }
     async function loadPages(){ const {data,error}=await state.client.from("pages").select("*").order("updated_at",{ascending:false}); if(error) throw error; state.pages=data||[]; }
