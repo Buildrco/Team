@@ -30,7 +30,7 @@
       <p>Manage published content without changing the public website.</p>
       <div id="auth-error" class="error hidden"></div>
       <form id="auth-form">
-        <label class="field"><span>Username</span><input id="username" autocomplete="username" placeholder="desmond" required /></label>
+        <label class="field"><span>Username</span><input id="username" autocomplete="username" placeholder="username or email" required /></label>
         <label class="field"><span>Password</span><input id="password" type="password" autocomplete="current-password" required /></label>
         <button class="button button-primary" type="submit">Sign in</button>
       </form>
@@ -60,6 +60,7 @@
     const $ = (selector) => document.querySelector(selector);
     const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[char]));
     const usernameEmail = (value) => `${String(value).trim().toLowerCase().replace(/[^a-z0-9._-]/g, "")}@nook-studios.internal`;
+    const authEmail = (value) => { const normalized=String(value).trim().toLowerCase(); return normalized.includes("@") ? normalized : usernameEmail(normalized); };
     const state = { client:null, profile:null, pages:[], view:"dashboard", page:null, site:null, creating:false };
 
     function message(error){ return error?.message || error?.error_description || String(error || "Something went wrong."); }
@@ -96,7 +97,7 @@
       try{
         const result=state.creating
           ? await state.client.auth.signUp({email:usernameEmail(username),password,options:{data:{username,full_name:username}}})
-          : await state.client.auth.signInWithPassword({email:usernameEmail(username),password});
+          : await state.client.auth.signInWithPassword({email:authEmail(username),password});
         if(result.error) throw result.error;
         if(state.creating && result.data.user){
           const claim=await state.client.rpc("claim_first_admin",{p_username:username.toLowerCase()});
