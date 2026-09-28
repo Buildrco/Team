@@ -95,9 +95,15 @@
       event.preventDefault(); clearError();
       const username=$("#username").value.trim(), password=$("#password").value;
       try{
-        const result=state.creating
+        let result=state.creating
           ? await state.client.auth.signUp({email:usernameEmail(username),password,options:{data:{username,full_name:username}}})
           : await state.client.auth.signInWithPassword({email:authEmail(username),password});
+        // If signup was rate-limited after creating the user, try that account once.
+        if(result.error && state.creating && /email rate limit exceeded|rate limit/i.test(result.error.message||"")){
+          const existing=await state.client.auth.signInWithPassword({email:authEmail(username),password});
+          if(!existing.error) result=existing;
+          else throw new Error("Supabase is rate-limiting signup emails. Tap Already have an account? Sign in, or wait for the email limit to reset.");
+        }
         if(result.error) throw result.error;
         if(state.creating && result.data.user){
           const claim=await state.client.rpc("claim_first_admin",{p_username:username.toLowerCase()});
