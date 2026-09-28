@@ -261,11 +261,6 @@
       style.textContent=".cms-add-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.cms-add-grid .wide{grid-column:1/-1}.cms-add-grid input,.cms-add-grid textarea,.cms-add-grid select{width:100%;padding:9px 10px;border:1px solid #dce0e7;border-radius:8px;background:#fff}.cms-add-grid textarea{min-height:84px;resize:vertical}@media(max-width:700px){.cms-add-grid{grid-template-columns:1fr}.cms-add-grid .wide{grid-column:auto}}";
       document.head.appendChild(style);
     }
-    async function renderElements(){
-      ensureCmsStyles(); cmsAddStyles(); state.cmsPath=state.cmsPath||"/"; await loadCmsRows(state.cmsPath);
-      const options=state.pages.map((page)=>{const path=cmsPagePath(page);return "<option value=\""+esc(path)+"\" "+(path===state.cmsPath?"selected":"")+">"+esc(page.title||path)+" — "+esc(path)+"</option>";}).join("");
-
-
     function cmsGroup(row){
       const selector=String(row.source_selector||"");
       const names=[]; const pattern=/data-framer-name="([^"]+)"/g; let match;
