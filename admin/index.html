@@ -76,22 +76,29 @@
       const { createClient }=await import("https://esm.sh/@supabase/supabase-js@2.57.4");
       state.client=createClient(data.url,data.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
     }
-    async function getProfile(){
-      const {data:{session}}=await state.client.auth.getSession();
+    async function getProfile(sessionOverride){
+      const session=sessionOverride || (await state.client.auth.getSession()).data.session;
       if(!session?.user) return null;
       const {data,error}=await state.client.from("profiles").select("*").eq("id",session.user.id).maybeSingle();
       if(error) throw error;
       if(!data || !["admin","editor"].includes(data.role)) throw new Error("This account does not have admin or editor access.");
       return data;
     }
-    async function enterApp(){
-      state.profile=await getProfile();
-      if(!state.profile){ showError("No staff profile is attached to this session."); return; }
-      await loadSite();
-      await loadPages();
+    async function enterApp(sessionOverride){
+      state.profile=await getProfile(sessionOverride);
+      if(!state.profile){ showError("No staff profile is attached to this session."); return false; }
+      // A valid staff session should always reach the dashboard. CMS reads load after the shell is visible.
       $("#auth").classList.add("hidden");
       $("#app").classList.remove("hidden");
       render();
+      try{
+        await Promise.all([loadSite(),loadPages()]);
+        render();
+      }catch(error){
+        console.error("CMS data load failed after sign-in",error);
+        toast("Dashboard opened, but CMS data could not be loaded: "+message(error));
+      }
+      return true;
     }
     async function loadSite(){ const {data,error}=await state.client.from("sites").select("*").eq("slug","nook-studios").maybeSingle(); if(error) throw error; state.site=data; }
     async function loadPages(){ const {data,error}=await state.client.from("pages").select("*").order("updated_at",{ascending:false}); if(error) throw error; state.pages=data||[]; }
@@ -114,7 +121,7 @@
           if(claim.error && !/already claimed|not available/i.test(claim.error.message)) throw claim.error;
           if(!result.data.session) throw new Error("Account created. Disable Supabase email confirmation before signing in.");
         }
-        await enterApp();
+        await enterApp(result.data.session);
       }catch(error){ showError(message(error)); }
     }
     function render(){
