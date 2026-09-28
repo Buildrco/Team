@@ -4,12 +4,16 @@ module.exports = function adminConfig(req, res) {
     return;
   }
 
-  const url = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-  const key = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+  // Use the connected production CMS project. The publishable key is safe for browser use.
+  // CMS_* overrides are supported for future project changes; stale VITE/SUPABASE values are ignored.
+  const defaultUrl = "https://lygosyhgjhcrpwardvvg.supabase.co";
+  const defaultKey = "sb_publishable_SrhTb2mo3k3stXUQ1Xr3qg_WNlB8xHP";
+  const url = process.env.CMS_SUPABASE_URL || defaultUrl;
+  const key = process.env.CMS_SUPABASE_PUBLISHABLE_KEY || defaultKey;
   const isPrivileged = typeof key === "string" && (/^sb_secret_/i.test(key) || /service_role/i.test(key));
 
   if (!url || !key) {
-    res.status(503).json({ error: "Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in Vercel. The public site does not need these variables." });
+    res.status(503).json({ error: "Supabase is not configured." });
     return;
   }
   if (isPrivileged) {
