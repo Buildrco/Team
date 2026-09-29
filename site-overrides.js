@@ -236,24 +236,45 @@
     oldTeamBlock.parentElement.insertBefore(section, oldTeamBlock);
   }
 
+  function findAboutLogoMarker(valueMarker) {
+    const candidates = [...document.querySelectorAll("[data-framer-name], [class*='logo' i], [class*='marquee' i], [class*='ticker' i]")].filter((element) => {
+      if (element.closest("header, nav, footer") || !valueMarker) return false;
+      if (!(element.compareDocumentPosition(valueMarker) & Node.DOCUMENT_POSITION_FOLLOWING)) return false;
+      const name = (element.getAttribute("data-framer-name") || "").toLowerCase();
+      const classes = (element.getAttribute("class") || "").toLowerCase();
+      const animated = getComputedStyle(element).animationName !== "none" ||
+        [...element.querySelectorAll("*")].some((child) => getComputedStyle(child).animationName !== "none");
+      return /logo|marquee|ticker|scroll/.test(name + " " + classes) && (animated || element.children.length > 1);
+    });
+    return candidates.sort((a, b) => b.textContent.trim().length - a.textContent.trim().length)[0] || null;
+  }
+
   function removeAboutIntro() {
     if (!/about/i.test(window.location.pathname)) return;
-    const marker = findAboutMarker(/^our\s+values?$/i);
-    if (!marker) return;
+    const valueMarker = findAboutMarker(/^our\s+values?$/i);
+    const logoMarker = findAboutLogoMarker(valueMarker);
+    if (!logoMarker) return;
 
-    const main = marker.closest("main");
+    let start = logoMarker;
+    let current = logoMarker;
+    for (let i = 0; i < 6; i += 1) {
+      const name = (current.getAttribute("data-framer-name") || "").toLowerCase();
+      const classes = (current.getAttribute("class") || "").toLowerCase();
+      if (/logo|marquee|ticker|scroll/.test(name + " " + classes)) start = current;
+      if (!current.parentElement) break;
+      current = current.parentElement;
+    }
+
+    const main = start.closest("main");
     let root = main;
-    let target = marker;
-
+    let target = start;
     if (root) {
       while (target.parentElement && target.parentElement !== root) target = target.parentElement;
     } else {
       for (let i = 0; i < 10; i += 1) {
         const parent = target.parentElement;
         if (!parent || parent === document.body || parent === document.documentElement) break;
-        if (parent.children.length > 1 && !parent.querySelector("header, nav")) {
-          root = parent;
-        }
+        if (parent.children.length > 1) root = parent;
         target = parent;
       }
     }
