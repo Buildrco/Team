@@ -284,6 +284,10 @@
   function updateAboutSections() {
     if (!/about/i.test(window.location.pathname)) return;
     removeAboutIntro();
+    removeAboutGallery();
+    hideAboutMarker(/awards?\s*(and|&)?\s*recognition/i);
+    hideAboutMarker(/find\s+us\s+nearby/i);
+    renderAboutTeam();
   }
 
   function scrub(root = document) {
