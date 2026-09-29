@@ -286,7 +286,7 @@
     removeAboutIntro();
     removeAboutGallery();
     hideAboutMarker(/awards?\s*(and|&)?\s*recognition/i);
-    hideAboutMarker(/find\s+us\s+nearby/i);
+    hideAboutMarker(/find\s+us\s+near(?:by|\s+by(?:\s+you)?)/i);
     renderAboutTeam();
   }
 
