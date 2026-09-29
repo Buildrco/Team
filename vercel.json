@@ -3,11 +3,11 @@
   "rewrites": [
     {
       "source": "/our-works",
-      "destination": "/api/works"
+      "destination": "/works.html"
     },
     {
       "source": "/works",
-      "destination": "/api/works"
+      "destination": "/works.html"
     }
   ]
 }
