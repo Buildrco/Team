@@ -3,11 +3,31 @@
   "rewrites": [
     {
       "source": "/our-works",
-      "destination": "/index.html"
+      "destination": "/works.html"
     },
     {
       "source": "/works",
-      "destination": "/index.html"
+      "destination": "/works.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/our-works",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/works",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate"
+        }
+      ]
     }
   ]
 }
