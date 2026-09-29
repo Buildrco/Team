@@ -236,57 +236,34 @@
     oldTeamBlock.parentElement.insertBefore(section, oldTeamBlock);
   }
 
-  function findAboutLogoMarker(valueMarker) {
-    const candidates = [...document.querySelectorAll("[data-framer-name], [class*='logo' i], [class*='marquee' i], [class*='ticker' i]")].filter((element) => {
-      if (element.closest("header, nav, footer") || !valueMarker) return false;
-      if (!(element.compareDocumentPosition(valueMarker) & Node.DOCUMENT_POSITION_FOLLOWING)) return false;
-      const name = (element.getAttribute("data-framer-name") || "").toLowerCase();
-      const classes = (element.getAttribute("class") || "").toLowerCase();
-      const animated = getComputedStyle(element).animationName !== "none" ||
-        [...element.querySelectorAll("*")].some((child) => getComputedStyle(child).animationName !== "none");
-      return /logo|marquee|ticker|scroll/.test(name + " " + classes) && (animated || element.children.length > 1);
-    });
-    return candidates.sort((a, b) => b.textContent.trim().length - a.textContent.trim().length)[0] || null;
+  function isAboutLogoAnimation(element) {
+    if (!element || element.closest("header, nav, footer")) return false;
+    const labels = [element, ...element.querySelectorAll("[data-framer-name]")].map((node) =>
+      `${node.getAttribute("data-framer-name") || ""} ${node.getAttribute("class") || ""}`.toLowerCase()
+    ).join(" ");
+    if (!/logo|marquee|ticker|scroll|client logos|trusted by/.test(labels)) return false;
+    const animated = getComputedStyle(element).animationName !== "none" ||
+      [...element.querySelectorAll("*")].some((child) => getComputedStyle(child).animationName !== "none");
+    return animated || element.children.length > 1 || element.querySelectorAll("img, svg").length > 2;
   }
 
   function removeAboutIntro() {
     if (!/about/i.test(window.location.pathname)) return;
     const valueMarker = findAboutMarker(/^our\s+values?$/i);
-    const logoMarker = findAboutLogoMarker(valueMarker);
-    if (!logoMarker) return;
+    const main = valueMarker?.closest("main");
+    if (!valueMarker || !main) return;
 
-    let start = logoMarker;
-    let current = logoMarker;
-    for (let i = 0; i < 6; i += 1) {
-      const name = (current.getAttribute("data-framer-name") || "").toLowerCase();
-      const classes = (current.getAttribute("class") || "").toLowerCase();
-      if (/logo|marquee|ticker|scroll/.test(name + " " + classes)) start = current;
-      if (!current.parentElement) break;
-      current = current.parentElement;
-    }
+    const sections = [...main.children];
+    const valueIndex = sections.findIndex((section) => section.contains(valueMarker));
+    if (valueIndex < 1) return;
 
-    const main = start.closest("main");
-    let root = main;
-    let target = start;
-    if (root) {
-      while (target.parentElement && target.parentElement !== root) target = target.parentElement;
-    } else {
-      for (let i = 0; i < 10; i += 1) {
-        const parent = target.parentElement;
-        if (!parent || parent === document.body || parent === document.documentElement) break;
-        if (parent.children.length > 1) root = parent;
-        target = parent;
-      }
-    }
+    const beforeValue = sections.slice(0, valueIndex);
+    const logoSections = beforeValue.filter(isAboutLogoAnimation);
+    if (!logoSections.length) return;
 
-    if (!root || target.parentElement !== root) return;
-    const children = [...root.children];
-    const targetIndex = children.indexOf(target);
-    if (targetIndex < 1) return;
-
-    children.slice(0, targetIndex).forEach((child) => {
-      if (child.querySelector("header, nav, footer")) return;
-      child.remove();
+    beforeValue.forEach((section) => {
+      if (logoSections.includes(section) || section.querySelector("header, nav, footer")) return;
+      section.remove();
     });
   }
 
