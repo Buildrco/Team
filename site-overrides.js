@@ -230,29 +230,47 @@
     if (!/about/i.test(window.location.pathname)) return;
     if (document.querySelector("[data-nook-about-trimmed]")) return;
 
-    const candidates = [...document.querySelectorAll("main [data-framer-name], main [class]")].filter((element) => {
+    const page = document.querySelector("#main, main");
+    if (!page) return;
+
+    const candidates = [...page.querySelectorAll("[data-framer-name], [class]")].filter((element) => {
       if (element.closest("header, nav, footer")) return false;
-      const label = `${element.getAttribute("data-framer-name") || ""} ${element.className || ""}`.toLowerCase();
+      const label = [element, ...element.querySelectorAll("[data-framer-name]")].map((node) =>
+        `${node.getAttribute("data-framer-name") || ""} ${node.getAttribute("class") || ""}`
+      ).join(" ").toLowerCase();
       if (!/logo|marquee|ticker|client|partner|trusted|scroll/.test(label)) return false;
       return element.querySelectorAll("img, svg").length >= 2 || element.children.length >= 2;
     });
     const logoMarker = candidates.sort((a, b) => {
       const score = (element) => {
-        const label = `${element.getAttribute("data-framer-name") || ""} ${element.className || ""}`.toLowerCase();
-        return (/marquee|ticker/.test(label) ? 4 : 0) + (/logo/.test(label) ? 3 : 0) +
-          Math.min(element.querySelectorAll("img, svg").length, 8) / 10;
+        const ownLabel = `${element.getAttribute("data-framer-name") || ""} ${element.getAttribute("class") || ""}`.toLowerCase();
+        const nestedLabel = [...element.querySelectorAll("[data-framer-name]")].map((node) =>
+          node.getAttribute("data-framer-name") || ""
+        ).join(" ").toLowerCase();
+        return (/marquee|ticker/.test(ownLabel) ? 12 : 0) + (/logo/.test(ownLabel) ? 8 : 0) +
+          (/marquee|ticker/.test(nestedLabel) ? 3 : 0) + (/logo/.test(nestedLabel) ? 2 : 0) +
+          Math.min(element.querySelectorAll("img, svg").length, 8) / 10 - element.querySelectorAll("*").length / 10000;
       };
       return score(b) - score(a);
     })[0];
-    const main = logoMarker?.closest("main");
-    if (!logoMarker || !main) return;
+    if (!logoMarker) return;
 
     let logoSection = logoMarker;
-    while (logoSection.parentElement && logoSection.parentElement !== main) {
-      logoSection = logoSection.parentElement;
+    let current = logoMarker;
+    let contentRoot = null;
+    while (current.parentElement && current.parentElement !== page) {
+      const parent = current.parentElement;
+      const hasDirectShell = [...parent.children].some((child) => /^(HEADER|NAV|FOOTER)$/i.test(child.tagName));
+      if (!hasDirectShell && current.previousElementSibling) {
+        contentRoot = parent;
+        logoSection = current;
+      }
+      if (hasDirectShell) break;
+      current = parent;
     }
+    if (!contentRoot) return;
 
-    const sections = [...main.children];
+    const sections = [...contentRoot.children];
     const logoIndex = sections.indexOf(logoSection);
     if (logoIndex < 0) return;
 
@@ -260,7 +278,7 @@
       if (section.querySelector("header, nav, footer")) return;
       section.remove();
     });
-    main.setAttribute("data-nook-about-trimmed", "true");
+    contentRoot.setAttribute("data-nook-about-trimmed", "true");
   }
 
   function updateAboutSections() {
