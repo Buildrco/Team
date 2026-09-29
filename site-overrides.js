@@ -338,10 +338,10 @@
       document.body.appendChild(script);
     };
 
-    if (document.readyState === "complete") {
-      inject();
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", inject, { once: true });
     } else {
-      window.addEventListener("load", inject, { once: true });
+      inject();
     }
   }
 
