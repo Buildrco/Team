@@ -191,22 +191,6 @@
     });
   }
 
-  function createLogoMarquee() {
-    if (!document.getElementById("nook-logo-marquee-styles")) {
-      const style = document.createElement("style");
-      style.id = "nook-logo-marquee-styles";
-      style.textContent =
-        ".nook-logo-marquee{overflow:hidden;width:100%;margin:0 0 42px;border-top:1px solid currentColor;border-bottom:1px solid currentColor;padding:18px 0}.nook-logo-track{display:flex;width:max-content;animation:nook-logo-scroll 26s linear infinite}.nook-logo-track span{display:flex;align-items:center;gap:28px;margin-right:28px;white-space:nowrap;font-size:14px;letter-spacing:.16em;font-weight:700}.nook-logo-track b{font-size:20px;font-weight:400}@keyframes nook-logo-scroll{to{transform:translateX(-50%)}}";
-      document.head.appendChild(style);
-    }
-    const marquee = document.createElement("div");
-    marquee.className = "nook-logo-marquee";
-    marquee.setAttribute("aria-label", "Nook Studios services");
-    const labels = ["BRANDING", "SEO", "CONTENT", "DIGITAL REACH", "WEB DESIGN", "STRATEGY"];
-    marquee.innerHTML = `<div class="nook-logo-track">${labels.concat(labels).map((label) => `<span>${label}<b>✦</b></span>`).join("")}</div>`;
-    return marquee;
-  }
-
   function renderAboutTeam() {
     if (!/about/i.test(window.location.pathname) || document.querySelector(".nook-about-team-section")) return;
     const marker = findAboutMarker(/our\s+creative\s+team/i);
@@ -244,38 +228,44 @@
 
   function removeAboutIntro() {
     if (!/about/i.test(window.location.pathname)) return;
-    if (document.querySelector(".nook-about-top-marquee")) return;
+    if (document.querySelector("[data-nook-about-trimmed]")) return;
 
-    const valueMarker = findAboutMarker(/^our\s+values?$/i);
-    const main = valueMarker?.closest("main");
-    if (!valueMarker || !main) return;
+    const candidates = [...document.querySelectorAll("main [data-framer-name], main [class]")].filter((element) => {
+      if (element.closest("header, nav, footer")) return false;
+      const label = `${element.getAttribute("data-framer-name") || ""} ${element.className || ""}`.toLowerCase();
+      if (!/logo|marquee|ticker|client|partner|trusted|scroll/.test(label)) return false;
+      return element.querySelectorAll("img, svg").length >= 2 || element.children.length >= 2;
+    });
+    const logoMarker = candidates.sort((a, b) => {
+      const score = (element) => {
+        const label = `${element.getAttribute("data-framer-name") || ""} ${element.className || ""}`.toLowerCase();
+        return (/marquee|ticker/.test(label) ? 4 : 0) + (/logo/.test(label) ? 3 : 0) +
+          Math.min(element.querySelectorAll("img, svg").length, 8) / 10;
+      };
+      return score(b) - score(a);
+    })[0];
+    const main = logoMarker?.closest("main");
+    if (!logoMarker || !main) return;
 
-    let valueSection = valueMarker;
-    while (valueSection.parentElement && valueSection.parentElement !== main) {
-      valueSection = valueSection.parentElement;
+    let logoSection = logoMarker;
+    while (logoSection.parentElement && logoSection.parentElement !== main) {
+      logoSection = logoSection.parentElement;
     }
 
     const sections = [...main.children];
-    const valueIndex = sections.indexOf(valueSection);
-    if (valueIndex < 0) return;
+    const logoIndex = sections.indexOf(logoSection);
+    if (logoIndex < 0) return;
 
-    sections.slice(0, valueIndex).forEach((section) => {
+    sections.slice(0, logoIndex).forEach((section) => {
       if (section.querySelector("header, nav, footer")) return;
       section.remove();
     });
-
-    const marquee = createLogoMarquee();
-    marquee.classList.add("nook-about-top-marquee");
-    valueSection.parentElement.insertBefore(marquee, valueSection);
+    main.setAttribute("data-nook-about-trimmed", "true");
   }
 
   function updateAboutSections() {
     if (!/about/i.test(window.location.pathname)) return;
     removeAboutIntro();
-    removeAboutGallery();
-    hideAboutMarker(/awards?\s*(and|&)?\s*recognition/i);
-    hideAboutMarker(/find\s+us\s+nearby/i);
-    renderAboutTeam();
   }
 
   function scrub(root = document) {
