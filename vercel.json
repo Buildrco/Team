@@ -2,7 +2,11 @@
   "version": 2,
   "routes": [
     {
-      "src": "^/(?:our-works|works)$",
+      "src": "^/works$",
+      "dest": "/index.html"
+    },
+    {
+      "src": "^/our-works$",
       "dest": "/index.html"
     },
     {
