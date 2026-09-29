@@ -236,17 +236,6 @@
     oldTeamBlock.parentElement.insertBefore(section, oldTeamBlock);
   }
 
-  function isAboutLogoAnimation(element) {
-    if (!element || element.closest("header, nav, footer")) return false;
-    const labels = [element, ...element.querySelectorAll("[data-framer-name]")].map((node) =>
-      `${node.getAttribute("data-framer-name") || ""} ${node.getAttribute("class") || ""}`.toLowerCase()
-    ).join(" ");
-    if (!/logo|marquee|ticker|scroll|client logos|trusted by/.test(labels)) return false;
-    const animated = getComputedStyle(element).animationName !== "none" ||
-      [...element.querySelectorAll("*")].some((child) => getComputedStyle(child).animationName !== "none");
-    return animated || element.children.length > 1 || element.querySelectorAll("img, svg").length > 2;
-  }
-
   function removeAboutIntro() {
     if (!/about/i.test(window.location.pathname)) return;
     const valueMarker = findAboutMarker(/^our\s+values?$/i);
@@ -255,14 +244,12 @@
 
     const sections = [...main.children];
     const valueIndex = sections.findIndex((section) => section.contains(valueMarker));
-    if (valueIndex < 1) return;
+    if (valueIndex < 2) return;
 
     const beforeValue = sections.slice(0, valueIndex);
-    const logoSections = beforeValue.filter(isAboutLogoAnimation);
-    if (!logoSections.length) return;
-
-    beforeValue.forEach((section) => {
-      if (logoSections.includes(section) || section.querySelector("header, nav, footer")) return;
+    const logoMarquee = beforeValue[beforeValue.length - 1];
+    beforeValue.slice(0, -1).forEach((section) => {
+      if (section === logoMarquee || section.querySelector("header, nav, footer")) return;
       section.remove();
     });
   }
