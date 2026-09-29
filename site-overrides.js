@@ -223,7 +223,8 @@
     style.textContent =
       ".nook-about-team-section{width:min(1120px,calc(100% - 48px));margin:56px auto 80px}.nook-about-team-heading h2{margin:0;font-size:clamp(32px,5vw,64px);line-height:1.05}.nook-about-team-heading p{margin:16px 0 0;max-width:620px;font-size:18px;line-height:1.5}.nook-logo-marquee{overflow:hidden;width:100%;margin:46px 0 42px;border-top:1px solid currentColor;border-bottom:1px solid currentColor;padding:18px 0}.nook-logo-track{display:flex;width:max-content;animation:nook-logo-scroll 26s linear infinite}.nook-logo-track span{display:flex;align-items:center;gap:28px;margin-right:28px;white-space:nowrap;font-size:14px;letter-spacing:.16em;font-weight:700}.nook-logo-track b{font-size:20px;font-weight:400}@keyframes nook-logo-scroll{to{transform:translateX(-50%)}}.nook-team-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}.nook-team-card{overflow:hidden;border-radius:16px;background:#fff}.nook-team-card img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover}.nook-team-card h3,.nook-team-card p{margin:12px 16px 0}.nook-team-card p{margin-bottom:16px;color:#667085}@media(max-width:800px){.nook-about-team-section{width:min(100% - 32px,620px)}.nook-team-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}@media(max-width:520px){.nook-team-grid{grid-template-columns:1fr}}";
     document.head.appendChild(style);
-    oldTeamBlock.parentElement.insertBefore(section, oldTeamBlock);
+    const insertionTarget = document.querySelector("[data-nook-about-logo-marquee]") || oldTeamBlock;
+    insertionTarget.parentElement.insertBefore(section, insertionTarget);
   }
 
   function removeAboutIntro() {
@@ -278,6 +279,7 @@
       if (section.querySelector("header, nav, footer")) return;
       section.remove();
     });
+    logoSection.setAttribute("data-nook-about-logo-marquee", "true");
     contentRoot.setAttribute("data-nook-about-trimmed", "true");
   }
 
