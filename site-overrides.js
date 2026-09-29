@@ -236,8 +236,42 @@
     oldTeamBlock.parentElement.insertBefore(section, oldTeamBlock);
   }
 
+  function removeAboutIntro() {
+    if (!/about/i.test(window.location.pathname)) return;
+    const marker = findAboutMarker(/^our\s+values?$/i);
+    if (!marker) return;
+
+    const main = marker.closest("main");
+    let root = main;
+    let target = marker;
+
+    if (root) {
+      while (target.parentElement && target.parentElement !== root) target = target.parentElement;
+    } else {
+      for (let i = 0; i < 10; i += 1) {
+        const parent = target.parentElement;
+        if (!parent || parent === document.body || parent === document.documentElement) break;
+        if (parent.children.length > 1 && !parent.querySelector("header, nav")) {
+          root = parent;
+        }
+        target = parent;
+      }
+    }
+
+    if (!root || target.parentElement !== root) return;
+    const children = [...root.children];
+    const targetIndex = children.indexOf(target);
+    if (targetIndex < 1) return;
+
+    children.slice(0, targetIndex).forEach((child) => {
+      if (child.querySelector("header, nav, footer")) return;
+      child.remove();
+    });
+  }
+
   function updateAboutSections() {
     if (!/about/i.test(window.location.pathname)) return;
+    removeAboutIntro();
     removeAboutGallery();
     hideAboutMarker(/awards?\s*(and|&)?\s*recognition/i);
     hideAboutMarker(/find\s+us\s+nearby/i);
