@@ -2,6 +2,13 @@
   "use strict";
 
   const WORK_NAMES = ["Bajindu", "Pump", "Canne", "Absolute.308", "Cuppa"];
+  const WORK_PATHS = new Set([
+    "/works/bajindu",
+    "/works/pump",
+    "/works/canne",
+    "/works/absolute.308",
+    "/works/cuppa-cuppa"
+  ]);
   let cards = [];
   let viewer;
   let active = -1;
@@ -21,42 +28,35 @@
   const worksRoute = () =>
     ["/works", "/our-works"].includes(window.location.pathname.replace(/\/+$/, "") || "/");
 
+  function isWorkLink(link) {
+    if (!link?.href) return false;
+    const path = new URL(link.href, window.location.href).pathname.replace(/\/+$/, "").toLowerCase();
+    return WORK_PATHS.has(path);
+  }
+
+  function getWorkLink(image) {
+    const link = image.closest("a[href]");
+    return isWorkLink(link) ? link : null;
+  }
+
   function isWorkImage(image) {
-    let node = image;
-    for (let depth = 0; node && depth < 9; depth += 1, node = node.parentElement) {
-      if (findName(node.textContent) || findName(image.alt)) return true;
-    }
-    return false;
+    return Boolean(getWorkLink(image));
   }
 
   function getCard(image) {
-    let node = image.parentElement;
-    let best = node;
-    for (let depth = 0; node && node.parentElement && depth < 9; depth += 1) {
-      const parent = node.parentElement;
-      const text = normal(parent.textContent);
-      const imageCount = parent.querySelectorAll("img").length;
-      if (imageCount === 1 && findName(text) && text.length < 320) best = parent;
-      if (imageCount > 1) break;
-      node = parent;
-    }
-    return best;
+    return getWorkLink(image);
   }
 
   function getGallery(nextCards) {
     let node = nextCards[0]?.parentElement;
-    let fallback = null;
     while (node && node !== document.body) {
-      const direct = [...node.children];
-      const directCards = nextCards.filter((card) => direct.includes(card)).length;
-      const workImages = [...node.querySelectorAll("img")].filter(isWorkImage).length;
-      if (workImages >= nextCards.length && workImages <= nextCards.length + 1) {
-        fallback = node;
-        if (directCards === nextCards.length) return node;
+      const workLinks = [...node.querySelectorAll("a[href]")].filter(isWorkLink);
+      if (workLinks.length === nextCards.length && nextCards.every((card) => node.contains(card))) {
+        return node;
       }
       node = node.parentElement;
     }
-    return fallback;
+    return null;
   }
 
   function addStyles() {
