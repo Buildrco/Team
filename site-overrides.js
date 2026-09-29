@@ -221,7 +221,7 @@
 
     const style = document.createElement("style");
     style.textContent =
-      ".nook-about-team-section{width:min(1120px,calc(100% - 48px));margin:112px auto 80px;animation:nook-team-enter .7s ease-out both}.nook-about-team-heading h2{margin:0;font-size:clamp(32px,5vw,64px);line-height:1.05}.nook-about-team-heading p{margin:16px 0 0;max-width:620px;font-size:18px;line-height:1.5}.nook-logo-marquee{overflow:hidden;width:100%;margin:46px 0 42px;border-top:1px solid currentColor;border-bottom:1px solid currentColor;padding:18px 0}.nook-logo-track{display:flex;width:max-content;animation:nook-logo-scroll 26s linear infinite}.nook-logo-track span{display:flex;align-items:center;gap:28px;margin-right:28px;white-space:nowrap;font-size:14px;letter-spacing:.16em;font-weight:700}.nook-logo-track b{font-size:20px;font-weight:400}@keyframes nook-logo-scroll{to{transform:translateX(-50%)}}@keyframes nook-team-enter{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}@keyframes nook-card-enter{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}.nook-team-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}.nook-team-card{overflow:hidden;border-radius:16px;background:#fff;min-width:0;opacity:0;animation:nook-card-enter .6s ease-out both}.nook-team-card img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:16px}.nook-team-card h3,.nook-team-card p{margin:12px 16px 0}.nook-team-card p{margin-bottom:16px;color:#667085}.nook-team-card:nth-child(2){animation-delay:.08s}.nook-team-card:nth-child(3){animation-delay:.16s}.nook-team-card:nth-child(4){animation-delay:.24s}.nook-team-card:nth-child(5){animation-delay:.32s}@media(max-width:800px){.nook-about-team-section{width:min(100% - 32px,620px);margin-top:112px;padding-top:56px}.nook-team-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}@media(max-width:520px){.nook-team-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.nook-team-card{min-width:0}}";
+      ".nook-about-team-section{width:min(1120px,calc(100% - 48px));margin:112px auto 80px;animation:nook-team-enter .7s ease-out both}.nook-about-team-heading h2{margin:0;font-size:clamp(32px,5vw,64px);line-height:1.05}.nook-about-team-heading p{margin:16px 0 20px;max-width:620px;font-size:18px;line-height:1.5}.nook-logo-marquee{overflow:hidden;width:100%;margin:46px 0 42px;border-top:1px solid currentColor;border-bottom:1px solid currentColor;padding:18px 0}.nook-logo-track{display:flex;width:max-content;animation:nook-logo-scroll 26s linear infinite}.nook-logo-track span{display:flex;align-items:center;gap:28px;margin-right:28px;white-space:nowrap;font-size:14px;letter-spacing:.16em;font-weight:700}.nook-logo-track b{font-size:20px;font-weight:400}@keyframes nook-logo-scroll{to{transform:translateX(-50%)}}@keyframes nook-team-enter{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}@keyframes nook-card-enter{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}.nook-team-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}.nook-team-card{overflow:hidden;border-radius:16px;background:#fff;min-width:0;opacity:0;animation:nook-card-enter .6s ease-out both}.nook-team-card img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:16px}.nook-team-card h3{margin:12px 16px 0}.nook-team-card p{margin:4px 16px 16px;color:#667085}.nook-team-card:nth-child(2){animation-delay:.08s}.nook-team-card:nth-child(3){animation-delay:.16s}.nook-team-card:nth-child(4){animation-delay:.24s}.nook-team-card:nth-child(5){animation-delay:.32s}@media(max-width:800px){.nook-about-team-section{width:min(100% - 32px,620px);margin-top:112px;padding-top:56px}.nook-team-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}@media(max-width:520px){.nook-team-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.nook-team-card{min-width:0}}";
     document.head.appendChild(style);
     const insertionTarget = document.querySelector("[data-nook-about-logo-marquee]") || oldTeamBlock;
     insertionTarget.parentElement.insertBefore(section, insertionTarget);
@@ -229,7 +229,7 @@
 
   function removeAboutIntro() {
     if (!/about/i.test(window.location.pathname)) return;
-    if (document.querySelector("[data-nook-about-trimmed]")) return;
+    if (document.querySelector("[data-nook-about-trimmed]") && document.querySelector("[data-nook-about-logo-marquee]")) return;
 
     const page = document.querySelector("#main, main");
     if (!page) return;
@@ -283,37 +283,14 @@
     contentRoot.setAttribute("data-nook-about-trimmed", "true");
   }
 
-  function keepOnlyAboutTeamAndLogo() {
-    if (!/about/i.test(window.location.pathname)) return;
-    const page = document.querySelector("#main, main");
-    const team = document.querySelector(".nook-about-team-section");
-    const logo = document.querySelector("[data-nook-about-logo-marquee]");
-    if (!page || !team || !logo) return;
-
-    const pruneBranches = (container) => {
-      [...container.children].forEach((child) => {
-        if (/^(HEADER|NAV|FOOTER)$/i.test(child.tagName)) return;
-        const containsTeam = child === team || child.contains(team);
-        const containsLogo = child === logo || child.contains(logo);
-        if (!containsTeam && !containsLogo) {
-          child.remove();
-          return;
-        }
-        if (child !== team && child !== logo) pruneBranches(child);
-      });
-    };
-
-    pruneBranches(page);
-  }
-
   function updateAboutSections() {
     if (!/about/i.test(window.location.pathname)) return;
     removeAboutIntro();
     removeAboutGallery();
     hideAboutMarker(/awards?\s*(and|&)?\s*recognition/i);
     hideAboutMarker(/find\s+us\s+near(?:by|\s+by(?:\s+you)?)/i);
+    hideAboutMarker(/^(?:our\s+)?(?:core\s+)?values?$/i);
     renderAboutTeam();
-    keepOnlyAboutTeamAndLogo();
   }
 
   function scrub(root = document) {
