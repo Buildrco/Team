@@ -353,6 +353,11 @@
 
   const start = () => {
     if (redirectBlogRoutes()) return;
+    const route = window.location.pathname.replace(/\/+$/, "") || "/";
+    if (["/works", "/our-works"].includes(route)) {
+      injectWorksGallery();
+      return;
+    }
     scrub();
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
