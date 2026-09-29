@@ -1,13 +1,12 @@
 {
-  "cleanUrls": true,
-  "rewrites": [
+  "version": 2,
+  "routes": [
     {
-      "source": "/our-works",
-      "destination": "/index.html"
+      "src": "^/(?:our-works|works)$",
+      "dest": "/index.html"
     },
     {
-      "source": "/works",
-      "destination": "/index.html"
+      "handle": "filesystem"
     }
   ]
 }
