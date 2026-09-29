@@ -192,6 +192,13 @@
   }
 
   function createLogoMarquee() {
+    if (!document.getElementById("nook-logo-marquee-styles")) {
+      const style = document.createElement("style");
+      style.id = "nook-logo-marquee-styles";
+      style.textContent =
+        ".nook-logo-marquee{overflow:hidden;width:100%;margin:0 0 42px;border-top:1px solid currentColor;border-bottom:1px solid currentColor;padding:18px 0}.nook-logo-track{display:flex;width:max-content;animation:nook-logo-scroll 26s linear infinite}.nook-logo-track span{display:flex;align-items:center;gap:28px;margin-right:28px;white-space:nowrap;font-size:14px;letter-spacing:.16em;font-weight:700}.nook-logo-track b{font-size:20px;font-weight:400}@keyframes nook-logo-scroll{to{transform:translateX(-50%)}}";
+      document.head.appendChild(style);
+    }
     const marquee = document.createElement("div");
     marquee.className = "nook-logo-marquee";
     marquee.setAttribute("aria-label", "Nook Studios services");
@@ -220,7 +227,6 @@
     const section = document.createElement("section");
     section.className = "nook-about-team-section";
     section.innerHTML = `<div class="nook-about-team-heading"><h2>Our Creative Team</h2><p>Explore the services our clients love most, designed to deliver exceptional results.</p></div>`;
-    section.appendChild(createLogoMarquee());
     const grid = document.createElement("div");
     grid.className = "nook-team-grid";
     grid.innerHTML = TEAM_MEMBERS.map(
@@ -238,20 +244,29 @@
 
   function removeAboutIntro() {
     if (!/about/i.test(window.location.pathname)) return;
+    if (document.querySelector(".nook-about-top-marquee")) return;
+
     const valueMarker = findAboutMarker(/^our\s+values?$/i);
     const main = valueMarker?.closest("main");
     if (!valueMarker || !main) return;
 
-    const sections = [...main.children];
-    const valueIndex = sections.findIndex((section) => section.contains(valueMarker));
-    if (valueIndex < 2) return;
+    let valueSection = valueMarker;
+    while (valueSection.parentElement && valueSection.parentElement !== main) {
+      valueSection = valueSection.parentElement;
+    }
 
-    const beforeValue = sections.slice(0, valueIndex);
-    const logoMarquee = beforeValue[beforeValue.length - 1];
-    beforeValue.slice(0, -1).forEach((section) => {
-      if (section === logoMarquee || section.querySelector("header, nav, footer")) return;
+    const sections = [...main.children];
+    const valueIndex = sections.indexOf(valueSection);
+    if (valueIndex < 0) return;
+
+    sections.slice(0, valueIndex).forEach((section) => {
+      if (section.querySelector("header, nav, footer")) return;
       section.remove();
     });
+
+    const marquee = createLogoMarquee();
+    marquee.classList.add("nook-about-top-marquee");
+    valueSection.parentElement.insertBefore(marquee, valueSection);
   }
 
   function updateAboutSections() {
