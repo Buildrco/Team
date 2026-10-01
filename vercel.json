@@ -18,6 +18,16 @@
       "dest": "/works-gallery.js"
     },
     {
+      "src": "^/(works|our-works)/$",
+      "dest": "/$1",
+      "status": 308
+    },
+    {
+      "src": "^/(works|our-works)/(.*)/$",
+      "dest": "/$1/$2",
+      "status": 308
+    },
+    {
       "handle": "filesystem"
     },
     {
