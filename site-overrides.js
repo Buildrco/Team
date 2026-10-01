@@ -356,6 +356,21 @@
     const route = window.location.pathname.replace(/\/+$/, "") || "/";
     if (["/works", "/our-works"].includes(route)) {
       injectWorksGallery();
+      const restoreWorksRoute = () => {
+        window.setTimeout(() => {
+          const currentRoute = window.location.pathname.replace(/\/+$/, "") || "/";
+          if (!["/works", "/our-works"].includes(currentRoute)) return;
+          const worksLink = [...document.querySelectorAll("a[href]")].find(
+            (link) => link.getAttribute("href") === "./works"
+          );
+          worksLink?.click();
+        }, 2200);
+      };
+      if (document.readyState === "complete") {
+        restoreWorksRoute();
+      } else {
+        window.addEventListener("load", restoreWorksRoute, { once: true });
+      }
       return;
     }
     scrub();
