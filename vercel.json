@@ -10,6 +10,14 @@
       "dest": "/index.html"
     },
     {
+      "src": "^/(works|our-works)(/.+)?/site-overrides\\.js$",
+      "dest": "/site-overrides.js"
+    },
+    {
+      "src": "^/(works|our-works)(/.+)?/works-gallery\\.js$",
+      "dest": "/works-gallery.js"
+    },
+    {
       "handle": "filesystem"
     },
     {
